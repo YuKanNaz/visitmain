@@ -40,7 +40,7 @@ function VisitUser() {
     
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`https://node-api-visit.vercel.app/prisoner?name=${searchTerm}`);
             setResults(response.data);
             setSelectedPrisoner(null); // รีเซ็ตคน
             
@@ -51,7 +51,7 @@ function VisitUser() {
 
     const showData = async () => {
         try{
-            const response = await axios.get('http://localhost:3001/notice');
+            const response = await axios.get('https://node-api-visit.vercel.app/notice');
             setShownotice(response.data);
         }
         catch (err){
@@ -67,7 +67,7 @@ function VisitUser() {
         if (!selectedPrisoner) return;
 
         try {
-            await axios.post('http://localhost:3001/book-visit', {
+            await axios.post('https://node-api-visit.vercel.app/book-visit', {
                 prisoner_code: selectedPrisoner.prisoner_code,
                 visitor_name: visitorName,
                 visit_date: visitDate,

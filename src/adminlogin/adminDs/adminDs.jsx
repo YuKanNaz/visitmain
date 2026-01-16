@@ -38,7 +38,7 @@ function AdminDs() {
     const handleReOf = async (e) => {
       e.preventDefault();
       try{
-        const response = await axios.post("http://localhost:3001/register-officer", {
+        const response = await axios.post("https://node-api-visit.vercel.app/register-officer", {
           nameof: nameof,
           username: username,
           password: password,
@@ -56,7 +56,7 @@ function AdminDs() {
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
     try {
-      const response = await axios.post("http://localhost:3001/register-user", {
+      const response = await axios.post("https://node-api-visit.vercel.app/register-user", {
         name: name,
         idCard: idCard,
         phone: phone,
@@ -91,7 +91,7 @@ function AdminDs() {
 
     const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`https://node-api-visit.vercel.app/prisoner?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -103,7 +103,7 @@ function AdminDs() {
     
     const handleActivate = async (id) => {
         try {
-            const response = await axios.put("http://localhost:3001/update-prisoner-status", {
+            const response = await axios.put("https://node-api-visit.vercel.app/update-prisoner-status", {
                 prisoner_id: id,
                 status: 1 
             });

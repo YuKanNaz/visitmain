@@ -15,7 +15,7 @@ function AdminLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/login-admin', {
+            const response = await axios.post('https://node-api-visit.vercel.app/login-admin', {
                 name: name,
                 password: password
             });
