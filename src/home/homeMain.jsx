@@ -6,7 +6,7 @@ const navigate = useNavigate();
  return(
     <>
     <div>
-      <h1>เทสระบบ<h1/>
+      
       <h1>หน้าหลัก</h1>
       <button onClick={() => navigate('/user-login')}>
         loginUser
