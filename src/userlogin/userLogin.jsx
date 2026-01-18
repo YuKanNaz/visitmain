@@ -64,7 +64,15 @@ function UserLogin() {
                 </div>
                 <br />
                 <button type="submit">เข้าจองคิว</button>
+                <button 
+                        type="button" 
+                        className="btn-back" 
+                        onClick={() => navigate('/')}
+                    >
+                        กลับหน้าหลัก
+                    </button>
             </form>
+            
         </div>
     );
 }

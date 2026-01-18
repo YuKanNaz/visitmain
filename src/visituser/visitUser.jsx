@@ -160,6 +160,7 @@ useEffect(() => {
             />
             <button onClick={handleSearch} style={{backgroundColor: "#1a3a5f", color: "white"}}>ค้นหา</button>
         </div>
+        <h4>*หากอยากดูรายชื่อทั้งหมดให้ลบคำค้นหาและกดค้นหา</h4>
 
         <div className="results-container">
             {results.map((item) => (
@@ -168,6 +169,7 @@ useEffect(() => {
                     <p>รหัส: {item.prisoner_code}</p>
                     <p>เลขบัตร: {item.id_card_number}</p>
                     <p>วันเกิด: {item.birthday}</p>
+                    <p className="text-red">* หากเลือกแล้วให้กรอกข้อมูลการเข้าจองด้านล่าง</p>
                     
                     {showuser === "จองแล้ว" && (
                         <button disabled style={{ backgroundColor: "#6c757d", color: "white", width: "100%" }}>
@@ -195,10 +197,20 @@ useEffect(() => {
                         <input type="date" onChange={(e) => setVisitDate(e.target.value)} required />
                         <p style={{color: "red", fontSize: "0.9rem"}}>*เลือกได้เเค่วัน จันทร์-ศุกร์</p>
                     </div>--*/}
+                        <div>
+                            <label>วันที่ต้องการเข้าเยี่ยม:</label>
+                             <select onChange={(e) => setVisit_day(e.target.value)} required>
+                                <option value="จันทร์">จันทร์</option>
+                                <option value="อังคาร">อังคาร</option>
+                                <option value="พุธ">พุธ</option>
+                                <option value="พฤหัส ">พฤหัส</option>                           
+                            </select>
+                        </div>
+
+
                     <div className="form-group-item">
-                        <label>รอบเวลา: </label>
+                        <label>รอบเวลาเข้าเยี่ยม: </label>
                         <select onChange={(e) => setVisitTime(e.target.value)} required>
-                            <option value="">กรุณา เลือกรอบเวลา</option>
                             <option value="12.00-12.05">รอบ 12.00-12.05</option>
                             <option value="12.05-12.10">รอบ 12.05-12.10</option>
                             <option value="12.10-12.15">รอบ 12.10-12.15</option>
@@ -213,14 +225,10 @@ useEffect(() => {
                             <option value="12.55-13.00">รอบ 12.55-13.00</option>
                         </select>
                     </div>
+
                     <div className="form-group-item">
-                        <label>เบอร์โทรศัพท์:</label>
-                        <input type="text" placeholder="เช่น 0812345678" onChange={(e) => setPhoneN(e.target.value)} required />
-                    </div>
-                    <div className="form-group-item">
-                        <label>ความสัมพันธ์:</label>
+                        <label>เกี่ยวข้องเป็น:</label>
                          <select onChange={(e) => setRalations(e.target.value)} required>
-                            <option value="">กรุณา เลือกความสัมพันธ์</option>
                             <option value="พ่อ">พ่อ</option>
                             <option value="แม่">แม่</option>
                             <option value="น้อง">น้อง</option>
@@ -238,21 +246,20 @@ useEffect(() => {
                         </select>
                     </div>
 
-                     <div>
-                            <label>เลือกวันที่ต้องการ:</label>
-                             <select onChange={(e) => setVisit_day(e.target.value)} required>
-                                <option value="">กรุณา เลือกความ วัน</option>
-                                <option value="จันทร์">จันทร์</option>
-                                <option value="อังคาร">อังคาร</option>
-                                <option value="พุธ">พุธ</option>
-                                <option value="พฤหัส ">พฤหัส</option>                           
-                            </select>
-                        </div>
+                    <div className="form-group-item">
+                        <label>กรอกเบอร์โทรศัพท์:</label>
+                        <input type="text" placeholder="ใส่เบอร์โทรศัพท์" onChange={(e) => setPhoneN(e.target.value)} required />
+                    </div>
+                    
+
+                     
 
                         
                     <br />
+                    <div className="bottom-visit">
                     <button type="submit" style={{backgroundColor: "#28a745", color: "white"}}>ยืนยันการจอง</button>
                     <button type="button" onClick={() => setSelectedPrisoner(null)} style={{marginLeft: "10px", backgroundColor: "#dc3545", color: "white"}}>ยกเลิก</button>
+                    </div>
                 </form>
             </div>
         )}
