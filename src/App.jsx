@@ -10,6 +10,8 @@ import HomeUser from './homeuser/homeUser';
 import VisitUser from './visituser/visitUser';
 import AdminDs from './adminlogin/adminDs/adminDs';
 import StaffDs from './stafflogin/staffloginDs.jsx/staffDs';
+import PrintPage from './doc/pdoc';
+
 import './App.css'
 
 
@@ -30,7 +32,9 @@ function App() {
         <Route path="/visit" element={<VisitUser />} />
         <Route path="/adminDs" element={<AdminDs />} />
         <Route path="/staffDs" element={<StaffDs />} />
-
+        <Route path="/printpage" element={<PrintPage />} />
+       
+      
         
         
       </Routes>

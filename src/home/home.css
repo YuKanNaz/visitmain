@@ -1,0 +1,132 @@
+/* 1. นำเข้าฟอนต์ที่มีหัว อ่านง่าย สุภาพ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;700&display=swap');
+
+/* ตั้งค่าตัวแปรสีเพื่อให้คุมโทนง่าย และดูสุภาพ */
+:root {
+  --primary-bg: #f8f9fa;      /* พื้นหลังสีขาวควันบุหรี่ สบายตา */
+  --text-dark: #2c3e50;       /* สีตัวอักษรเข้มเกือบดำ อ่านชัดกว่าสีดำสนิท */
+  --btn-user: #2E7D32;        /* สีเขียวใบไม้ (สบายตา สื่อถึงความปลอดภัย) */
+  --btn-staff: #1976D2;       /* สีฟ้าน้ำเงิน (ทางการ เชื่อถือได้) */
+  --btn-admin: #455A64;       /* สีเทาอมฟ้า (เคร่งขรึม) */
+  --shadow-soft: 0 4px 6px rgba(0,0,0,0.1); /* เงาบางๆ ให้ปุ่มดูลอยขึ้นมา */
+}
+
+/* ตั้งค่าโครงสร้างหลัก */
+.home-main-page {
+  min-height: 100vh;
+  background-color: var(--primary-bg);
+  font-family: "Noto Serif Thai", serif;
+  display: flex;
+  justify-content: center; /* จัดกึ่งกลางแนวนอน */
+  align-items: center;     /* จัดกึ่งกลางแนวตั้ง */
+  padding: 20px;           /* เว้นขอบไม่ให้ติดจอเกินไปในมือถือ */
+}
+
+/* กล่องคอนเทนเนอร์กลางหน้าจอ */
+.container {
+  width: 100%;
+  max-width: 500px; /* จำกัดความกว้างไม่ให้ปุ่มยาวเกินไปบน PC */
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* เงาฟุ้งๆ ดูพรีเมียม */
+  text-align: center;
+}
+
+/* หัวข้อ */
+.home-main-page h1 {
+  color: var(--text-dark);
+  font-weight: 700;
+  margin-bottom: 40px;
+  /* ใช้ clamp เพื่อปรับขนาดตามจออัตโนมัติ (ต่ำสุด 2rem, ปกติ 5vw, สูงสุด 3rem) */
+  font-size: clamp(2rem, 5vw, 3rem); 
+  border-bottom: 2px solid #ececec; /* เส้นขีดใต้บางๆ */
+  padding-bottom: 15px;
+}
+
+/* กลุ่มของปุ่ม */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* ระยะห่างระหว่างปุ่ม 20px ชัดเจน ไม่เบียดกัน */
+  width: 100%;
+}
+
+/* สไตล์ปุ่มกด (Common Style) */
+.home-main-page button {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 700;
+  width: 100%;
+  padding: 18px 24px;       /* พื้นที่กดเยอะๆ เหมาะกับผู้สูงอายุ */
+  font-size: 1.4rem;        /* ตัวหนังสือใหญ่ */
+  border: none;
+  border-radius: 12px;      /* มุมมนกำลังดี ไม่กลมจนดูเล่นเกินไป */
+  cursor: pointer;
+  color: white;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  line-height: 1.4;
+}
+
+/* Effect ตอนเอาเมาส์ชี้ หรือกด */
+.home-main-page button:active {
+  transform: scale(0.98); /* ยุบลงเล็กน้อยเมื่อกด */
+}
+.home-main-page button:hover {
+  transform: translateY(-2px); /* ลอยขึ้นเล็กน้อย */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  filter: brightness(1.1); /* สว่างขึ้นเล็กน้อย */
+}
+
+/* แยกสีปุ่มตามหน้าที่ (Class ที่เราเติมใน React) */
+.btn-user, .btn-user-ds {
+  background-color: var(--btn-user);
+}
+
+.btn-staff, .btn-staff-ds {
+  background-color: var(--btn-staff);
+}
+
+.btn-admin, .btn-admin-ds {
+  background-color: var(--btn-admin);
+}
+
+/* -------------------------------------------------------- */
+/* Media Query: ปรับแต่งเมื่อหน้าจอเล็ก (มือถือ) */
+/* -------------------------------------------------------- */
+@media (max-width: 600px) {
+  
+  .container {
+    padding: 30px 20px; /* ลด padding ลง */
+    box-shadow: none;   /* เอาเงากล่องออกให้ดูเรียบขึ้นในมือถือ */
+    background-color: transparent; /* ให้กลืนไปกับพื้นหลัง */
+  }
+
+  .home-main-page h1 {
+    margin-bottom: 30px;
+    font-size: 2.2rem; /* บังคับขนาดหัวข้อให้พอดีมือถือ */
+  }
+
+  .home-main-page button {
+    padding: 16px;     /* ลดความสูงปุ่มนิดหน่อย แต่ยังกดง่าย */
+    font-size: 1.25rem; /* ลดขนาดตัวอักษรลงให้เหมาะสมกับจอเล็ก */
+    border-radius: 10px;
+    height: auto;      /* ให้ความสูงยืดหดตามเนื้อหา */
+  }
+  
+  /* เพิ่มระยะห่างปุ่มอีกนิดสำหรับจอทัชสกรีน */
+  .button-group {
+    gap: 15px;
+  }
+}
+
+/* สำหรับจอที่เล็กมากๆ (เช่น iPhone SE รุ่นเก่า) */
+@media (max-width: 360px) {
+  .home-main-page h1 {
+    font-size: 1.8rem;
+  }
+  .home-main-page button {
+    font-size: 1.1rem;
+    padding: 14px;
+  }
+}

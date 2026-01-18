@@ -1,0 +1,146 @@
+/* นำเข้าฟอนต์ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;700&display=swap');
+
+/* ตั้งค่าพื้นฐานหน้าจอ */
+.admin-login-page {
+    min-height: 100vh;
+    background-color: #f0f2f5; /* สีเทาอ่อน สบายตา */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Noto Serif Thai", serif;
+    padding: 20px;
+}
+
+/* การ์ดกล่อง Login ตรงกลาง */
+.login-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 16px;
+    /* เงาเนียนๆ ให้ดูลอยขึ้นมา */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+    border-top: 6px solid #0d2137; /* แถบสีด้านบนระบุตัวตน Admin */
+    display: flex;
+    flex-direction: column;
+}
+
+/* หัวข้อ */
+.login-card h2 {
+    color: #0d2137; /* สีน้ำเงินเข้ม (Admin) */
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* จัดกลุ่ม Form ให้ห่างกันสวยงามโดยไม่ต้องใช้ <br> */
+.form-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ป้ายกำกับ Label */
+.form-group label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #34495e;
+    margin-bottom: 8px;
+}
+
+/* ช่องกรอกข้อมูล Input */
+.form-group input {
+    width: 95%;
+    padding: 14px 16px; /* พื้นที่ภายในเยอะๆ พิมพ์ง่าย */
+    font-size: 1.2rem;
+    border: 2px solid #cfd8dc;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: "Noto Serif Thai", serif;
+    color: #333;
+}
+
+/* เมื่อคลิกที่ช่อง Input */
+.form-group input:focus {
+    border-color: #0d2137;
+    box-shadow: 0 0 0 4px rgba(13, 33, 55, 0.1);
+}
+
+/* ปุ่ม Login */
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    background-color: #0d2137; /* สีเดียวกับหัวข้อ */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+    font-family: "Noto Serif Thai", serif;
+}
+
+.btn-login:hover {
+    background-color: #16365c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* ปุ่มกลับหน้าหลัก (เป็นตัวเลือกเสริม สไตล์เรียบๆ) */
+.btn-back {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: transparent;
+    color: #666;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-family: "Noto Serif Thai", serif;
+    text-decoration: underline;
+}
+
+.btn-back:hover {
+    color: #0d2137;
+}
+
+/* ------------------------------------------- */
+/* Media Query สำหรับมือถือ */
+/* ------------------------------------------- */
+@media (max-width: 600px) {
+    .admin-login-page {
+        padding: 15px;
+        align-items: center; /* บนมือถือจัดกึ่งกลาง */
+    }
+
+    .login-card {
+        padding: 25px 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .login-card h2 {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 1.1rem;
+    }
+
+    .form-group input {
+        font-size: 1.1rem;
+        padding: 12px;
+    }
+
+    .btn-login {
+        font-size: 1.2rem;
+        padding: 14px;
+    }
+}

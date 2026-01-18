@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;700&display=swap');
+
+/* ส่วนควบคุมพื้นฐาน */
+.admin-dashboard {
+    font-family: "Noto Serif Thai", serif;
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 15px; /* ลด padding สำหรับมือถือ */
+    box-sizing: border-box;
+}
+
+/* Header: ปรับให้ยืดหยุ่น */
+.user-info {
+    background-color: #1a3a5f;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row; /* ปกติเรียงแนวนอน */
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* ถ้าจอมือถือเล็กมากให้ขึ้นบรรทัดใหม่ */
+    gap: 10px;
+}
+
+.user-info h3 { margin: 0; font-size: 1.1rem; }
+
+/* ส่วนของฟอร์มเพิ่มพนักงาน */
+.con-put-of {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-top: 6px solid #1a3a5f;
+    width: 100%;
+    max-width: 500px; /* คุมความกว้างใน PC */
+    margin: 0 auto 30px auto; /* จัดกลาง */
+    box-sizing: border-box;
+}
+
+.head-of {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a3a5f;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Input: ทำให้เต็มความกว้างเสมอ */
+.inputbox { margin-bottom: 12px; }
+.inputbox input {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px; /* ป้องกัน iOS ซูมจอเวลาโฟกัส */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.inputbox { margin-bottom: 12px; }
+.inputbox input {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px; /* ป้องกัน iOS ซูมจอเวลาโฟกัส */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.buttonbox button {
+    width: 100%;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ส่วนค้นหาผู้ต้องขัง */
+.search-section {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-section h1 {
+    font-size: 1.6rem;
+    color: #1a3a5f;
+    margin-bottom: 15px;
+}
+
+/* ปรับส่วนค้นหาให้เหมาะกับมือถือ */
+.search-section > div:first-of-type {
+    display: flex;
+    flex-direction: row; /* PC เรียงแนวนอน */
+    gap: 10px;
+}
+
+/* การ์ดผู้ต้องขัง: ใช้ Grid ที่ฉลาดขึ้น */
+.prisoner-grid {
+    display: grid;
+    /* ใน PC จะแบ่งเป็นคอลัมน์ ในมือถือจะปรับเป็น 1 คอลัมน์อัตโนมัติ */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.prisoner-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+.prisoner-card button {
+    width: 100%;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #1a3a5f;
+    color: #1a3a5f;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* ปุ่ม Logout */
+.logout-btn-container {
+    text-align: center;
+    margin: 40px 0;
+}
+.logout-btn {
+    width: 100%; /* มือถือเต็มจอ */
+    max-width: 200px; /* PC คุมความกว้าง */
+    padding: 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+/* --- Media Queries สำหรับมือถือ (หน้าจอเล็กกว่า 600px) --- */
+@media (max-width: 600px) {
+    .admin-dashboard { padding: 10px; }
+    
+    /* ปรับส่วนค้นหาให้ปุ่มลงมาข้างล่างในมือถือที่แคบมากๆ */
+    .search-section > div:first-of-type {
+        flex-direction: column;
+    }
+    
+    .search-section button {
+        width: 100%;
+        padding: 12px !important;
+    }
+
+    .user-info {
+        flex-direction: column;
+        text-align: center;
+    }
+}

@@ -1,0 +1,122 @@
+/* ล็อกสไตล์เฉพาะหน้า Booking */
+.booking-page {
+    font-family: "Noto Serif Thai", serif;
+    min-height: 100vh;
+    padding-bottom: 50px;
+    color: #333;
+}
+
+/* ส่วนหัวข้อหลัก */
+.booking-page h2 {
+    color: #1a3a5f;
+    border-left: 8px solid #1a3a5f;
+    padding-left: 15px;
+    margin: 20px 0;
+    font-weight: 700;
+}
+
+/* --- ส่วนประกาศ (Notice) --- */
+.booking-page .notice-section {
+    background: #fff3cd; /* สีเหลืองอ่อนดูเป็นประกาศ */
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #ffeeba;
+}
+
+.booking-page h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #856404;
+}
+
+/* --- ส่วนการค้นหา --- */
+.booking-page input[type="text"] {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px;
+    margin-right: 10px;
+}
+
+.booking-page button {
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+/* --- การ์ดรายชื่อผู้ต้องขัง (Results) --- */
+.booking-page .results-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.booking-page .prisoner-card {
+    background: white !important;
+    border: none !important; /* ทับ style เดิม */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.booking-page .prisoner-card:hover {
+    transform: translateY(-5px);
+}
+
+/* --- ฟอร์มการจอง (Booking Form) --- */
+.booking-page .booking-form-box {
+    margin-top: 30px;
+    border: none !important; /* ทับ inline style */
+    border-radius: 20px;
+    padding: 30px !important;
+    background-color: #ffffff !important; /* เปลี่ยนจากสีชมพูเป็นขาวสะอาด */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-top: 10px solid #1a3a5f !important; /* แถบสีด้านบนให้ดูเป็นทางการ */
+}
+
+.booking-page .booking-form-box h3 {
+    color: #1a3a5f;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
+.booking-page .form-group-item {
+    margin-bottom: 20px;
+}
+
+.booking-page label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.booking-page input[type="date"],
+.booking-page select,
+.booking-page input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: 2px solid #ced4da;
+    font-family: "Noto Serif Thai", serif;
+}
+
+/* --- ปุ่มกดปิดท้ายหน้า --- */
+.booking-page .bottom-nav {
+    margin-top: 40px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.booking-page .btn-logout { background-color: #6c757d; color: white; }
+.booking-page .btn-home { background-color: #1a3a5f; color: white; }

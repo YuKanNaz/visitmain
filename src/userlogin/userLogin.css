@@ -1,0 +1,80 @@
+/* ล็อกสไตล์เฉพาะหน้า User Login */
+.user-login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Noto Serif Thai", serif;
+}
+
+/* จัดการหัวข้อ */
+.user-login-page h2 {
+    color: #1a3a5f;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* จัดระเบียบ Form */
+.user-login-page form {
+    background: rgb(219, 217, 219);
+    padding: 40px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 400px; /* คุมความกว้างช่องกรอก */
+}
+
+/* สไตล์สำหรับ Label */
+.user-login-page label {
+    display: block; /* ให้ label อยู่บรรทัดบน */
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+/* สไตล์สำหรับ Input (เน้นใหญ่และชัด) */
+.user-login-page input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.4rem;
+    border: 2px solid #ced4da;
+    border-radius: 10px;
+    box-sizing: border-box; /* กันล้น */
+    font-family: sans-serif; /* ใช้ font พื้นฐานสำหรับช่องรหัสเพื่อให้จุดกลมชัดเจน */
+}
+
+.user-login-page input:focus {
+    outline: none;
+    border-color: #28a745;
+    background-color: #f8fff9;
+}
+
+/* ปุ่มกด (อิงดีไซน์เดียวกับหน้าแรกเพื่อให้จดจำง่าย) */
+.user-login-page button {
+    width: 100%;
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: "Noto Serif Thai", serif;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.user-login-page button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* ซ่อน <br /> เพื่อใช้ช่องว่างจาก CSS แทนในหน้าจอใหญ่ (เลือกทำหรือไม่ก็ได้) */
+.user-login-page br {
+    display: block;
+    content: "";
+    margin-top: 10px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import './adminDs.css';
 
 function AdminDs() {
     const navigate = useNavigate();
@@ -8,11 +9,6 @@ function AdminDs() {
     const [prisoners, setPrisoners] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
-    //register user
-    const [name, setName] = useState("");
-    const [idCard, setIdCard] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
 
     //register off
     const [nameof, setNameof] = useState("");
@@ -26,13 +22,14 @@ function AdminDs() {
     useEffect(() => {
         const adminStatus = localStorage.getItem("Status");
         if (adminStatus !== "admin") {
-          alert("คุณไม่ใช่ admin");
+         
           navigate('/')
         }
     }, []);
 
     const handleLoginout = async () => {
       localStorage.clear();
+      navigate('/')
     }
     
     const handleReOf = async (e) => {
@@ -117,130 +114,64 @@ function AdminDs() {
     };
     return (
       <>
-      <div>
-        <h3>ชื่อผู้ใช้ {myName}</h3>
-      </div>
-        <div className="con-put-of">
-            <div className="head-of"> เพิ่มรายชื่อพนักงาน</div>
+        <div className="admin-dashboard">
+          <div className="user-info">
+              <h3>ชื่อผู้ใช้: {myName}</h3>
+              <span>ระบบจัดการเจ้าหน้าที่</span>
+          </div>
 
-            <form onSubmit={handleReOf}>
-                <div className="inputbox">
-                    <input 
-                        placeholder="ชื่อ-สกุล"
-                        value={nameof}
-                        onChange={(e) => setNameof(e.target.value)}
-                        required
-                    />
-                </div>
+          <div className="forms-grid">
+              
+              <div className="con-put-of">
+                  <div className="head-of">เพิ่มรายชื่อพนักงาน</div>
+                  <form onSubmit={handleReOf}>
+                      <div className="inputbox">
+                          <input placeholder="ชื่อ-สกุล" value={nameof} onChange={(e) => setNameof(e.target.value)} required />
+                      </div>
+                      <div className="inputbox">
+                          <input placeholder="ชื่อผู้ใช้" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                      </div>
+                      <div className="inputbox">
+                          <input type="password" placeholder="รหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                      </div>
+                      <div className="buttonbox">
+                          <button type="submit">เพิ่มรายชื่อพนักงาน</button>
+                      </div>
+                  </form>
+              </div>
 
-                <div className="inputbox">
-                    <input 
-                        placeholder="ชื่อผู้ใช้"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
+              
+          </div>
 
-                <div className="inputbox">
-                    <input 
-                        placeholder="ใส่รหัสผ่าน"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="buttonbox">
-                  <button type="submit">เพิ่มรายชื่อ</button>
-                </div>
-            </form>
-
-        </div>
-
-
-
-        <div className="container">
-      <div className="logintext">
-        <h2>เพิ่มรายชื่อผู้ใช้</h2>
-      </div>
-
-      <form onSubmit={handleAdmin}>
-        <div className="inputbox">
-          <input
-            placeholder="ชื่อ-สกุล"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required 
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            placeholder="เลขบัตรประชาชน"
-            maxLength={13}
-            value={idCard}
-            onChange={(e) => setIdCard(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            placeholder="เบอร์โทรศัพท์"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            type="email"
-            placeholder="อีเมล"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="buttonbox">
-          <button type="submit">เพิ่มรายชื่อ</button>
-        </div>
-      </form>
-    </div>
-
-
-      <div>
-        <h1>ค้นหาชื่อผู้ต้องขัง</h1>
-        <div>
-              <input 
+        <div className="search-section">
+            <h1>ค้นหาชื่อผู้ต้องขัง</h1>
+            <div className="">
+            <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+                <input 
                     type="text" 
                     placeholder="ค้นหาชื่อผู้ต้องขัง..." 
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ flex: 1 }}
                 />
-                <button onClick={fetchPrisoners}>ค้นหา</button>
-        </div>
-
-        <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
+                <button onClick={fetchPrisoners} style={{ backgroundColor: "#1a3a5f", color: "white", padding: "0 25px", borderRadius: "8px" }}>ค้นหา</button>
+            </div>
+            </div>
+            <div className="prisoner-grid">
                 {prisoners.map((item) => (
-                    <div key={item.prisoner_id} style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
+                    <div key={item.prisoner_id} className="prisoner-card">
                         <h3>{item.name}</h3>
                         <p>รหัส: {item.prisoner_code}</p>
-                        <p>สถานะ:
-                            <span style=
-                            {{ color: item.status == 1 ? "green" : "red" }}>
-                            {item.status == 1 ? "ยืนยัน" : "ไม่ยืนยัน"}
-                            </span>
-                        </p>
-                        <button onClick={() => handleActivate(item.prisoner_id)}>เปลี่ยนสถานะ</button>
+                        
                     </div>
-                    
-                ))}
-                
+              ))}
+          </div>
         </div>
-                
-      </div>
 
-      <button onClick={handleLoginout}>
-        loginout
-      </button>
+          <div className="logout-btn-container">
+              <button className="logout-btn" onClick={handleLoginout}>ออกจากระบบ (Logout)</button>
+          </div>
+          <button onClick={() => navigate('/')}>กลับหน้าหลัก</button>
+        </div>
       </>
     );
 }

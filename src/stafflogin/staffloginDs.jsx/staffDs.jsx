@@ -7,9 +7,19 @@ function StaffDs(){
     const [idCard, setIdCard] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
+    const [birthday, setBirthday] = useState("");
 
     const [prisoners, setPrisoners] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+
+    const [prisoners_code, setPrisoners_code] = useState("");
+    const [namePrisoner, setNamePrisoner] = useState("");
+    const [age, setAge] = useState("");
+    const [cell_number, setCell_number] = useState("");
+    const [sentence_detail, setSentence_detail] = useState("");
+    const [birthdayP, setBirthdayP] = useState("");
+    const [id_card_numberP, setId_card_numberP] = useState("");
+
 
     const [notice, setNotice] = useState("");
     const [createby, setCreateby] = useState("");
@@ -19,29 +29,17 @@ function StaffDs(){
     const navigate = useNavigate();
     const handleLoginout = async () => {
       localStorage.clear();
+      navigate('/')
     }
     useEffect(() => {
             const staffStatus = localStorage.getItem("Status");
             if (staffStatus !== "staff") {
-              alert("คุณไม่ใช่ officer");
+              
               navigate('/')
             }
     }, []);
 
-    const handleActivate = async (id) => {
-        try {
-            const response = await axios.put("https://node-api-visit.vercel.app/update-prisoner-status", {
-                prisoner_id: id,
-                status: 1 
-            });
-            fetchPrisoners()// โหลดใหม่
-            
-           
-        } catch (err) {
-            console.error("Update Error:", err);
-            alert("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
-        }
-    };
+    
 
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
@@ -51,18 +49,10 @@ function StaffDs(){
         idCard: idCard,
         phone: phone,
         email: email,
+        birthday: birthday
       });
 
-      // ✅ Axios จะเก็บข้อมูลไว้ใน data โดยตรง
-      if (response.data.status === "success") {
-        alert("✅ " + response.data.message);
-        
-        // ล้างค่าฟอร์ม
-        setName("");
-        setIdCard("");
-        setPhone("");
-        setEmail("");
-      }
+      alert("เพิ่มรายชื่อผู้ใช้สำเร็จ");
 
     } catch (err) {
       // ✅ 3. การจัดการ Error ของ Axios
@@ -90,6 +80,9 @@ function StaffDs(){
         }
     };
 
+        
+  
+
   const handleputtext = async (e) => {
     e.preventDefault(); 
     try {
@@ -100,14 +93,33 @@ function StaffDs(){
         
         setCreateby(myName);
         alert("ลงประกาศเเล้ว");
-        window.location.reload();
+        
         
     } catch (err) {
         alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
     }
 }
 
-
+  const handleputprisoner = async (e) => {
+    e.preventDefault(); 
+    try {
+        const response = await axios.post("https://node-api-visit.vercel.app/putprisoner", {
+            prisoner_code: prisoners_code,
+            name: namePrisoner,
+            age: age,
+            cell_number: cell_number,
+            sentence_detail: sentence_detail,
+            added_by: myName,
+            birthdayP: birthdayP,
+            id_card_numberP: id_card_numberP
+        });
+         alert(response.data.message);
+      } catch (err) {
+        if(err.response){
+          console.error("เพิ่มผู้ต้องขังไม่สำเร็จ" + (err.response?.data?.message || "เกิดข้อผิดพลาด" ))
+        }
+      }
+    }
   
 
 
@@ -138,8 +150,10 @@ function StaffDs(){
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={fetchPrisoners}>ค้นหา</button>
+                <button onClick={() => navigate('/printpage')}>ปริ้นใบรายชื่อ</button>
             </div>
-             <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
+
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
                 {prisoners.map((item) => (
                     <div key={item.prisoner_id} style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
                         <h3>{item.name}</h3>
@@ -148,16 +162,77 @@ function StaffDs(){
                     </div>
                     
                 ))}
-                
-        </div>
+              </div>
             
         </div>
 
+        <div>
+          <h1>เพิ่มรายชื่อผู้ต้องขัง</h1>
+          <form onSubmit={handleputprisoner}>
+            <div className="inputbox">
+              <input
+                placeholder="รหัสผู้ต้องขัง"
+                value={prisoners_code}
+                onChange={(e) => setPrisoners_code(e.target.value)}
+                required 
+              /><br />
+            </div>
+            <div className="inputbox" >
+              <input  
+                placeholder="ชื่อ-สกุล"
+                value={namePrisoner}
+                onChange={(e) => setNamePrisoner(e.target.value)}
+                required
+              /><br />
+            </div>
+            <div className="inputbox">
+              <input
+                placeholder="อายุ"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                required
+              /><br />
+            </div>
+            <div className="inputbox">
+              <input
+                placeholder="หมายเลขห้องขัง"
+                value={cell_number}
+                onChange={(e) => setCell_number(e.target.value)}
+                required
+              /><br />
+            </div>
+            <div className="inputbox">
+              <input
+                placeholder="รายละเอียดคำพิพากษา"
+                value={sentence_detail}
+                onChange={(e) => setSentence_detail(e.target.value)}
+                required
+              /><br />
+            </div>
+
+            <div className="inputbox">
+              <input
+                placeholder="เลขบัตร"
+                value={id_card_numberP}
+                onChange={(e) => setId_card_numberP(e.target.value)}
+                required
+              /><br />
+            </div>
+            <div className="inputbox">
+              <input
+                placeholder="วันเกิด"
+                value={birthdayP}
+                onChange={(e) => setBirthdayP(e.target.value)}
+                required
+              /><br />
+            </div>
+            <div className="buttonbox">
+              <button type="submit">เพิ่มรายชื่อผู้ต้องขัง</button>
+            </div>
 
 
-
-
-
+          </form>
+        </div>
 
          <div className="logintext">
             <h2>เพิ่มรายชื่อผู้ใช้</h2>
@@ -198,15 +273,23 @@ function StaffDs(){
             required
           /><br />
         </div>
+        <div className="inputbox">
+          <input
+            placeholder="วันเกิด"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            required
+          /><br />
+        </div>
         <div className="buttonbox">
           <button type="submit">เพิ่มรายชื่อ</button>
         </div>
       </form>
-
+          
 
     
       <div>
-        <button onClick={handleLoginout}>loginout</button>
+        <button onClick={handleLoginout}>logout</button>
       </div>
         
       <div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import React  from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import './stafflogin.css';
 
 
 function StaffLogin () {
@@ -42,27 +43,43 @@ function StaffLogin () {
   };
   return (
     <>
-    <div>staffLogin</div>
-    <form onSubmit={handleLogin}>
-      <div>
-        <label>Name: </label>
-        <input 
-        type="text" 
-        onChange={(e) => setUsername(e.target.value)}
-        required
-        />
-      </div>
+    <div className="staff-login-page">
+    <div className="staff-container">
+        <h2>เข้าสู่ระบบพนักงาน</h2>
+        <form onSubmit={handleLogin}>
+            <div>
+                <label>ชื่อ: </label>
+                <input 
+                    type="text" 
+                    placeholder="ชื่อผู้ใช้"
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+            </div>
 
-      <div>
-        <label>password :</label>
-        <input 
-        type="text" 
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        />
-      </div>
-      <button type="submit">เข้าสู่ระบบ</button>
-    </form>
+            <div>
+                <label>รหัสผ่าน: </label>
+                <input 
+                    type="password"  /* เปลี่ยนเป็น password เพื่อความปลอดภัย */
+                    placeholder="กรอกรหัสผ่าน"
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+            </div>
+            <button type="submit">เข้าสู่ระบบพนักงาน</button>
+            <div className='back'>
+            {/* ปุ่มย้อนกลับ (เผื่อไว้กดกลับหน้าหลัก) */}
+                    <button 
+                        type="button" 
+                        className="btn-back" 
+                        onClick={() => navigate('/')}
+                    >
+                        กลับหน้าหลัก
+                    </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 
 

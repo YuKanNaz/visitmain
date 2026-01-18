@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './userLogin.css';
 
 function UserLogin() {
     const [name, setName] = useState("");
@@ -39,28 +40,30 @@ function UserLogin() {
 
         
 
-        <div style={{ padding: "20px" }}>
-            <h2>User Login</h2>
+        <div className="user-login-page" style={{ padding: "20px" }}>
+            <h2>เข้าสู่ระบบเพื่อจองคิว</h2>
             <form onSubmit={handleLogin}>
                 <div>
-                    <label>Name: </label>
+                    <label>ชื่อ: </label>
                     <input 
-                        type="text" 
+                        type="text"
+                        placeholder="กรุณาใส่ชื่อผู้ใช้"
                         onChange={(e) => setName(e.target.value)} 
                         required 
                     />
                 </div>
                 <br />
                 <div>
-                    <label>Birthday: </label>
+                    <label>วันเกิด: </label>
                     <input 
                         type="password" 
+                        placeholder="กรุณาใส่วันเกิด"
                         onChange={(e) => setBirthday(e.target.value)} 
                         required 
                     />
                 </div>
                 <br />
-                <button type="submit">เข้าสู่ระบบ</button>
+                <button type="submit">เข้าจองคิว</button>
             </form>
         </div>
     );
