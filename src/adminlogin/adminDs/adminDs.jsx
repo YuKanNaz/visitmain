@@ -101,23 +101,6 @@ function AdminDs() {
         }
     };
 
-    
-    const handleActivate = async (id) => {
-        try {
-            const response = await axios.put("https://node-api-visit.vercel.app/update-prisoner-status", {
-                prisoner_id: id,
-                status: 1 
-            });
-            fetchPrisoners()// โหลดใหม่
-            
-           
-        } catch (err) {
-            console.error("Update Error:", err);
-            alert("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
-        }
-    };
-
-
     const fetchOfficers = async () => {
         try {
             // ✅ ใช้ searchOfficerTerm เพื่อไม่ให้ตีกับช่องค้นหานักโทษ
@@ -125,13 +108,34 @@ function AdminDs() {
             setOfficers(response.data); // ✅ เก็บข้อมูลลง State officers
         } catch (error) {
             console.error(error);
-            alert("ไม่สามารถดึงข้อมูลพนักงานได้");
+            alert(("เกิดข้อผิดพลาด: " +(err.response?.data?.message || err.message)));
+        }
+    };
+    const handleDeleteOfficer = async (id) => {
+      if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
+        try {
+            const response = await axios.delete(`https://node-api-visit.vercel.app/delete-officer/${id}`);
+            fetchOfficers()// โหลดใหม่
+        } catch (err) {
+            console.error("Delete Error:", err);
+            alert("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
         }
     };
 
-
-
-
+    const handleResetSystem = async () => {
+    const confirmReset = window.confirm("คุณแน่ใจหรือว่าต้องการรีเซ็ตระบบใช่หรือไม่?");
+    if (confirmReset) {
+        try {
+            const response = await axios.delete('https://node-api-visit.vercel.app/reset-system');
+            alert("คุณได้ทำการรีเซ็ตระบบเรียบร้อยแล้ว");
+            window.location.reload(); 
+        } catch (error) {
+            console.error("Reset Error:", error);
+            alert("เกิดข้อผิดพลาดในการรีเซ็ตระบบ");
+        }
+    }
+};
+            
     return (
       <>
         <div className="admin-dashboard">
@@ -163,45 +167,40 @@ function AdminDs() {
 
 
 
-          <div className="search-section">
-            <h1>ค้นหาชื่อผู้ต้องขัง</h1>
+            <div className="search-section">
+            <h1>ค้นหาชื่อพนักงาน</h1>
             <div className="">
-            <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-                <input 
+            <div >
+              <input 
                     type="text" 
                     placeholder="ค้นหาชื่อผู้ต้องขัง..." 
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ flex: 1 }}
+                    onChange={(e) => setSearchOfficerTerm(e.target.value)}
                 />
-                <button onClick={fetchPrisoners} style={{ backgroundColor: "#1a3a5f", color: "white", padding: "0 25px", borderRadius: "8px" }}>ค้นหา</button>
-            </div>
+                <button onClick={fetchOfficers}>ค้นหา</button>
             </div>
             <div className="prisoner-grid">
-                {prisoners.map((item) => (
-                    <div key={item.prisoner_id} className="prisoner-card">
+                {officers.map((item) => (
+                    <div key={item.id} >
                         <h3>{item.name}</h3>
-                        <p>รหัส: {item.prisoner_code}</p>
-                        
+                        <p>ชื่อจริง: {item.username}</p>
+                        <button onClick={() =>handleDeleteOfficer(item.id)}>ลบพนักงาน</button>
                     </div>
-              ))}
-          </div>
-        </div>
+                ))}
+              </div>
+              </div>
+              </div>
 
-
-
-          
 
         <div className="search-section">
             <h1>ค้นหาชื่อผู้ต้องขัง</h1>
             <div className="">
-            <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+            <div>
                 <input 
                     type="text" 
                     placeholder="ค้นหาชื่อผู้ต้องขัง..." 
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ flex: 1 }}
                 />
-                <button onClick={fetchPrisoners} style={{ backgroundColor: "#1a3a5f", color: "white", padding: "0 25px", borderRadius: "8px" }}>ค้นหา</button>
+                <button onClick={fetchPrisoners} >ค้นหา</button>
             </div>
             </div>
             <div className="prisoner-grid">
@@ -209,6 +208,8 @@ function AdminDs() {
                     <div key={item.prisoner_id} className="prisoner-card">
                         <h3>{item.name}</h3>
                         <p>รหัส: {item.prisoner_code}</p>
+                        <p>เลขบัตรประชาชน: {item.id_card_number}</p>
+                        <p>วันเกิด: {item.birthday}</p>
                         
                     </div>
               ))}
@@ -219,7 +220,12 @@ function AdminDs() {
               <button className="logout-btn" onClick={handleLoginout}>ออกจากระบบ (Logout)</button>
           </div>
           <button onClick={() => navigate('/')}>กลับหน้าหลัก</button>
+          <button onClick={handleResetSystem}>
+            รีเซ็ตระบบเริ่มต้นใหม่
+          </button>
         </div>
+
+       
       </>
     );
 }

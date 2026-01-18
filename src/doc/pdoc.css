@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;700&display=swap');
+
+/* --- โครงสร้างหลัก --- */
+.print-page-layout {
+  font-family: "Noto Serif Thai", serif;
+  background-color: #f4f6f8; /* สีพื้นหลังเทาอ่อน */
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.print-container {
+  background-color: white;
+  width: 100%;
+  max-width: 900px; /* จำกัดความกว้างไม่ให้ตารางยืดเกินไป */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.page-header {
+  color: #0d2137;
+  text-align: center;
+  margin-top: 0;
+  border-bottom: 2px solid #0d2137;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+/* --- ส่วนฟอร์มค้นหา --- */
+.search-section {
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 30px;
+}
+
+.date-form {
+  display: flex;
+  flex-wrap: wrap; /* ให้ตกบรรทัดเมื่อจอเล็ก */
+  gap: 15px;
+  align-items: flex-end; /* จัดให้ปุ่มกับกล่องข้อความตรงกัน */
+  justify-content: center;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* ขยายเต็มที่ */
+  min-width: 250px;
+}
+
+.input-group label {
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.date-input {
+  padding: 12px 15px;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: "Noto Serif Thai", serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- ปุ่มกด (Design System เดิม) --- */
+button {
+  font-family: "Noto Serif Thai", serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 50px;
+}
+
+button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-submit {
+  background-color: #2E7D32; /* เขียว */
+  color: white;
+  min-width: 150px;
+}
+
+.btn-print {
+  background-color: #1565C0; /* น้ำเงิน */
+  color: white;
+  padding: 15px 40px; /* ปุ่มใหญ่พิเศษ */
+  font-size: 1.2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-back {
+  background-color: #607D8B; /* เทา */
+  color: white;
+}
+
+/* --- ส่วนตาราง --- */
+.table-responsive {
+  margin: 20px 0;
+  overflow-x: auto; /* สำคัญ: ถ้าตารางกว้างเกินจอ มือถือจะเลื่อนซ้ายขวาได้ */
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+/* --- Footer Buttons --- */
+.action-footer {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 1px dashed #ccc;
+}
+
+/* ---------------------------------- */
+/* Responsive สำหรับมือถือ */
+/* ---------------------------------- */
+@media (max-width: 600px) {
+  .print-page-layout {
+    padding: 10px;
+  }
+  
+  .print-container {
+    padding: 15px;
+  }
+
+  .date-form {
+    flex-direction: column; /* เรียงลงแนวตั้ง */
+  }
+  
+  .input-group, .btn-submit, .btn-print, .btn-back {
+    width: 100%; /* ปุ่มเต็มจอ */
+  }
+}
+
+/* ---------------------------------- */
+/* ตั้งค่าสำหรับการสั่ง Print (Ctrl+P) */
+/* ---------------------------------- */
+@media print {
+  /* ซ่อนทุกอย่างที่ไม่ใช่ตาราง */
+  .search-section, 
+  .action-footer, 
+  .btn-submit,
+  .no-print {
+    display: none !important;
+  }
+
+  /* ปรับแต่งหน้ากระดาษ */
+  .print-page-layout {
+    background-color: white;
+    padding: 0;
+    margin: 0;
+  }
+
+  .print-container {
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  /* ให้ตารางชัดเจนขึ้น */
+  .table-responsive {
+    border: none;
+    overflow: visible;
+  }
+}

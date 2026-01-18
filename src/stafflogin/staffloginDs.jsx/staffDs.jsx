@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import './staffDs.css';
 function StaffDs(){
+  
 
     const [name, setName] = useState("");
     const [idCard, setIdCard] = useState("");
@@ -159,195 +161,233 @@ function StaffDs(){
         <>
         
 
-        <div>
-          <div>
+        <div className="admin-container">
+      
+      {/* --- ส่วนที่ 1: ลงประกาศ --- */}
+      <div className="content-card">
+          <div className="card-header">
             <h1>ลงประกาศ</h1>
+          </div>
+          <div className="card-body">
             <form onSubmit={handleputtext}>
-              <div className="inputbox">
+              <div className="inputbox full-width">
                 <input
+                className="form-control"
                 placeholder="ใส่ข้อความประกาศ"
                 onChange={(e) => setNotice(e.target.value)}
                 />
               </div>
-              <button type="submit">ลงประกาศ</button>
+              <button className="btn-primary" type="submit">ลงประกาศ</button>
             </form>
           </div>
+      </div>
 
+      
+      
 
-            <h1>ค้นหารายชื่อ</h1>
-            <div>
-              <input 
-                    type="text" 
-                    placeholder="ค้นหาชื่อผู้ต้องขัง..." 
-                    onChange={(e) => setSearchTerm(e.target.value)}
+      {/* --- ส่วนที่ 3: เพิ่มผู้ต้องขัง --- */}
+      <div className="content-card">
+          <div className="card-header">
+             <h1>เพิ่มรายชื่อผู้ต้องขัง</h1>
+          </div>
+          <div className="card-body">
+            <form onSubmit={handleputprisoner} className="form-layout">
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="รหัสผู้ต้องขัง"
+                    value={prisoners_code}
+                    onChange={(e) => setPrisoners_code(e.target.value)}
+                    required 
                 />
-                <button onClick={fetchPrisoners}>ค้นหา</button>
-                <button onClick={() => navigate('/printpage')}>ปริ้นใบรายชื่อ</button>
-            </div>
+                </div>
+                <div className="inputbox" >
+                <input  
+                    className="form-control"
+                    placeholder="ชื่อ-สกุล"
+                    value={namePrisoner}
+                    onChange={(e) => setNamePrisoner(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="อายุ"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="หมายเลขห้องขัง"
+                    value={cell_number}
+                    onChange={(e) => setCell_number(e.target.value)}
+                    required
+                />
+                </div>
+                  
+                <div className="inputbox full-width">
+                <input
+                    className="form-control"
+                    placeholder="รายละเอียดคำพิพากษา"
+                    value={sentence_detail}
+                    onChange={(e) => setSentence_detail(e.target.value)}
+                    required
+                />
+                </div>
+                
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="เลขบัตรประจำตัวประชาชน"
+                    value={id_card_numberP}
+                    onChange={(e) => setId_card_numberP(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="วันเกิด (วว/ดด/ปปปป)"
+                    value={birthdayP}
+                    onChange={(e) => setBirthdayP(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="buttonbox full-width">
+                <button className="btn-success" type="submit">บันทึกข้อมูล</button>
+                </div>
+            </form>
+          </div>
+      </div>
 
+      <div className="content-card">
+                  <div className="card-header">
+                      <h1>ค้นหารายชื่อผู้ต้องขัง</h1>
+                  </div>
+                  <div className="card-body">
+                      <div className="search-bar">
+                          <input 
+                              className="form-control"
+                              type="text" 
+                              placeholder="ค้นหาชื่อผู้ต้องขัง..." 
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                          />
+                          <button className="btn-search" onClick={fetchPrisoners}>ค้นหา</button>
+                      </div>
 
-
-            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
-                {prisoners.map((item) => (
-                    <div key={item.prisoner_id} style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
-                        <h3>{item.name}</h3>
-                        <p>รหัส: {item.prisoner_code}</p>
-                        <button onClick={() =>handleDeletePrisoner(item.prisoner_id)}>ลบนักโทษ</button>
-                    </div>
-                ))}
-              </div>
-            
-        </div>
-
-        <div>
-          <h1>เพิ่มรายชื่อผู้ต้องขัง</h1>
-          <form onSubmit={handleputprisoner}>
-            <div className="inputbox">
-              <input
-                placeholder="รหัสผู้ต้องขัง"
-                value={prisoners_code}
-                onChange={(e) => setPrisoners_code(e.target.value)}
-                required 
-              /><br />
+                      <div className="result-grid">
+                          {prisoners.map((item) => (
+                              <div key={item.prisoner_id} className="result-item">
+                                  <h3>{item.name}</h3>
+                                  <p>รหัส: {item.prisoner_code}</p>
+                                  <p>เลขบัตรประชาชน: {item.id_card_number}</p>
+                                  <p>วันเกิด: {item.birthday}</p>
+                                  <button className="btn-danger small" onClick={() =>handleDeletePrisoner(item.prisoner_id)}>ลบข้อมูล</button>
+                              </div>
+                          ))}
+                      </div>
+                  </div>
             </div>
-            <div className="inputbox" >
-              <input  
-                placeholder="ชื่อ-สกุล"
-                value={namePrisoner}
-                onChange={(e) => setNamePrisoner(e.target.value)}
-                required
-              /><br />
-            </div>
-            <div className="inputbox">
-              <input
-                placeholder="อายุ"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                required
-              /><br />
-            </div>
-            <div className="inputbox">
-              <input
-                placeholder="หมายเลขห้องขัง"
-                value={cell_number}
-                onChange={(e) => setCell_number(e.target.value)}
-                required
-              /><br />
-            </div>
-            <div className="inputbox">
-              <input
-                placeholder="รายละเอียดคำพิพากษา"
-                value={sentence_detail}
-                onChange={(e) => setSentence_detail(e.target.value)}
-                required
-              /><br />
-            </div>
-
-            <div className="inputbox">
-              <input
-                placeholder="เลขบัตร"
-                value={id_card_numberP}
-                onChange={(e) => setId_card_numberP(e.target.value)}
-                required
-              /><br />
-            </div>
-            <div className="inputbox">
-              <input
-                placeholder="วันเกิด"
-                value={birthdayP}
-                onChange={(e) => setBirthdayP(e.target.value)}
-                required
-              /><br />
-            </div>
-            <div className="buttonbox">
-              <button type="submit">เพิ่มรายชื่อผู้ต้องขัง</button>
-            </div>
-
-
-          </form>
-        </div>
-
-         <div className="logintext">
+      {/* --- ส่วนที่ 4: เพิ่มผู้ใช้ --- */}
+      <div className="content-card">
+         <div className="card-header">
             <h2>เพิ่มรายชื่อผู้ใช้</h2>
-        </div>
-
-      <form onSubmit={handleAdmin}>
-        <div className="inputbox">
-          <input
-            placeholder="ชื่อ-สกุล"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required 
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            placeholder="เลขบัตรประชาชน"
-            maxLength={13}
-            value={idCard}
-            onChange={(e) => setIdCard(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            placeholder="เบอร์โทรศัพท์"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            type="email"
-            placeholder="อีเมล"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="inputbox">
-          <input
-            placeholder="วันเกิด"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-            required
-          /><br />
-        </div>
-        <div className="buttonbox">
-          <button type="submit">เพิ่มรายชื่อ</button>
-        </div>
-      </form>
-
-            <h1>ค้นหารายชื่อ</h1>
-            <div>
-              <input 
-                    type="text" 
-                    placeholder="ค้นหาชื่อผู้ใช้งาน" 
-                    onChange={(e) => setSearchUser(e.target.value)}
+         </div>
+         <div className="card-body">
+            <form onSubmit={handleAdmin} className="form-layout">
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="ชื่อ-สกุล"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required 
                 />
-                <button onClick={fetchuser}>ค้นหา</button>
-            </div>  
-            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
-                {showUser.map((item) => (
-                    <div key={item.id} style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
-                        <h3>{item.name}</h3>
-                        <p>เลขบัตรประชาชน:{item.id_card_number}</p>
-                        <p>วันเกิด: {item.birthday}</p>
-                        
-                        <button onClick={() =>handleDeleteUser(item.id)}>ลบนักโทษ</button>
-                    </div>
-                ))}
-              </div>
-            
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="เลขบัตรประชาชน"
+                    maxLength={13}
+                    value={idCard}
+                    onChange={(e) => setIdCard(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="เบอร์โทรศัพท์"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    type="email"
+                    placeholder="อีเมล"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="วันเกิด"
+                    value={birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
+                    required
+                />
+                </div>
+                <div className="buttonbox full-width">
+                <button className="btn-success" type="submit">เพิ่มรายชื่อ</button>
+                </div>
+            </form>
+         </div>
+      </div>
 
-      <div>
-        <button onClick={handleLoginout}>logout</button>
+      {/* --- ส่วนที่ 5: ค้นหาผู้ใช้ --- */}
+      <div className="content-card">
+            <div className="card-header">
+                <h1>ค้นหารายชื่อผู้ใช้งาน</h1>
+            </div>
+            <div className="card-body">
+                <div className="search-bar">
+                    <input 
+                        className="form-control"
+                        type="text" 
+                        placeholder="ค้นหาชื่อผู้ใช้งาน" 
+                        onChange={(e) => setSearchUser(e.target.value)}
+                    />
+                    <button className="btn-search" onClick={fetchuser}>ค้นหา</button>
+                </div>  
+                <div className="result-grid">
+                    {showUser.map((item) => (
+                        <div key={item.id} className="result-item">
+                            <h3>{item.name}</h3>
+                            <p>เลขบัตรประชาชน: {item.id_card_number}</p>
+                            <p>วันเกิด: {item.birthday}</p>
+                            <button className="btn-danger small" onClick={() =>handleDeleteUser(item.id)}>ลบข้อมูล</button>
+                        </div>
+                    ))}
+                </div>
+            </div>
       </div>
-        
-      <div>
-        <button onClick={() => navigate('/')}>กลับหน้าหลัก</button>
+      <button className="btn-secondary" onClick={() => navigate('/printpage')}>พิมพ์หนังสือ(PDF)</button>
+      {/* Footer Buttons */}
+      <div className="footer-actions">
+        <button className="btn-danger" onClick={handleLoginout}>ออกจากระบบ</button>
+        <button className="btn-secondary" onClick={() => navigate('/')}>กลับหน้าหลัก</button>
       </div>
+
+    </div>
         </>
     )
 }

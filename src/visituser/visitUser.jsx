@@ -155,7 +155,7 @@ useEffect(() => {
         <div className="search-box">
             <input 
                 type="text" 
-                placeholder="ค้นหาชื่อผู้ต้องขัง..." 
+                placeholder="ใส่ชื่อผู้ต้องขัง..."
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button onClick={handleSearch} style={{backgroundColor: "#1a3a5f", color: "white"}}>ค้นหา</button>

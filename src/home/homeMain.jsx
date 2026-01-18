@@ -27,7 +27,7 @@ function Homemain(){
       <div className="button-group login-group">
         {/* เปลี่ยนข้อความเป็นไทยเพื่อให้ผู้สูงอายุเข้าใจง่าย */}
         <button className="btn-user" onClick={() => navigate('/user-login')}>
-          เข้าสู่ระบบสมาชิก
+          จองคิวเข้าเยี่ยม
         </button>
         <button className="btn-staff" onClick={() => navigate('/staff-login')}>
           เข้าสู่ระบบเจ้าหน้าที่
@@ -45,7 +45,7 @@ function Homemain(){
       <div className="home-main-page">
         <div className="container">
           
-          <h1>หน้าหลัก</h1>
+          <h2>เรือนจำชั่วคราวเขาพลอง</h2>
           
           {/* แสดงปุ่ม Login ถ้ายังไม่ได้ Login */}
           {!isAdmin && !isStaff && !isUser && buttonLogin()}
@@ -66,7 +66,7 @@ function Homemain(){
 
             {isUser && (
               <button className="btn-user-ds" onClick={() => navigate('/visit')}>
-                ระบบการจองเยี่ยม
+                จองคิวเข้าเยี่ยม
               </button>
             )}
           </div>

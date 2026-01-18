@@ -44,10 +44,10 @@ function UserLogin() {
             <h2>เข้าสู่ระบบเพื่อจองคิว</h2>
             <form onSubmit={handleLogin}>
                 <div>
-                    <label>ชื่อ: </label>
+                    <label>รหัสบัตรประจำตัวประชาชน: </label>
                     <input 
                         type="text"
-                        placeholder="กรุณาใส่ชื่อผู้ใช้"
+                        placeholder="กรุณาเลขบัตรประชาชน"
                         onChange={(e) => setName(e.target.value)} 
                         required 
                     />

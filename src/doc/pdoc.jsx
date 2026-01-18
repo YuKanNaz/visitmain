@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './pdoc.css';
 
 
 const TableComponent = React.forwardRef(({ data , dateValue}, ref) => {
@@ -78,43 +79,52 @@ const PrintPage = () => {
   });
 
   return (
-    <div style={{ padding: '20px' }}>
-      <form onSubmit={handldputtext}>
-        <label>
-          ลงวันที่: 
-          <input 
-            type="text" 
-            value={inputValue} 
-            onChange={(e) => setInputValue(e.target.value)} 
-            placeholder="กรอกวันที่ที่ต้องการ"
-          />
-        </label>
+    <div className="print-page-layout">
+      <div className="print-container">
         
-        <button type="submit" style={{ marginLeft: '10px' }}>ส่งข้อความ</button>
+        {/* หัวข้อหน้า (เพิ่มเพื่อให้รู้ว่าอยู่หน้าไหน) */}
+        <h2 className="page-header">พิมพ์รายงานสรุปยอด</h2>
+
+        {/* ส่วนฟอร์มค้นหา */}
+        <div className="search-section">
+          <form onSubmit={handldputtext} className="date-form">
+            <div className="input-group">
+              <label>ลงวันที่:</label>
+              <input 
+                type="text" 
+                value={inputValue} 
+                onChange={(e) => setInputValue(e.target.value)} 
+                placeholder="รายละเอียดวันที่"
+                className="date-input"
+              />
+            </div>
+            <button type="submit" className="btn-submit">เพิ่มข้อความ</button>
+          </form>
+        </div>
         
-      </form>
-      
-      <TableComponent ref={componentRef} data={data} dateValue={putdata}/>
-      
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button 
-          onClick={() => handlePrint()} 
-          style={{ 
-            padding: '10px 20px', 
-            backgroundColor: '#007bff', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
-        >
-          ปริ้นเอกสาร
-        </button>
+        {/* ส่วนตาราง (ใส่ Wrapper เพื่อให้เลื่อนซ้ายขวาได้ในมือถือ) */}
+        <div className="table-responsive">
+          <TableComponent ref={componentRef} data={data} dateValue={putdata}/>
+        </div>
+        
+        {/* ส่วนปุ่มกดด้านล่าง */}
+        <div className="action-footer no-print">
+            <button 
+              className="btn-print"
+              onClick={() => handlePrint()} 
+            >
+              🖨️ ปริ้นหนังสือ
+            </button>
+
+            <button 
+              className="btn-back"
+              onClick={() => navigate('/')}
+            >
+              กลับหน้าหลัก
+            </button>
+        </div>
+
       </div>
-          <div>
-            <button onClick={() => navigate('/')}>กลับหน้าหลัก</button>
-          </div>
     </div>
     
   );

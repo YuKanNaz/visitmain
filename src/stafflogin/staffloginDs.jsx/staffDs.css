@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+/* เปลี่ยนใช้ฟอนต์ Sarabun ซึ่งเป็นมาตรฐานราชการ/ทางการกว่า Noto Serif */
+
+:root {
+    --primary-color: #003366; /* สีน้ำเงินเข้ม กรมท่า (ทางการ) */
+    --secondary-color: #6c757d; /* สีเทา */
+    --success-color: #198754; /* สีเขียว */
+    --danger-color: #dc3545; /* สีแดง */
+    --bg-color: #f4f6f9; /* สีพื้นหลังเทาอ่อน */
+    --card-bg: #ffffff;
+    --border-color: #dee2e6;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+.admin-container {
+    font-family: 'Sarabun', sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+}
+
+/* --- Card Style (กล่องเนื้อหา) --- */
+.content-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px; /* มุมมนนิดเดียว ให้ดูแข็งแรง */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--primary-color); /* เส้นขีดใต้สีน้ำเงินเข้ม */
+}
+
+.card-header h1, 
+.card-header h2 {
+    margin: 0;
+    font-size: 1.25rem; /* ขนาดมาตรฐาน ไม่ใหญ่เกินไป */
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* --- Form Layout (Grid) --- */
+.form-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.inputbox {
+    flex: 1 1 calc(50% - 15px); /* PC: แบ่งครึ่ง 2 คอลัมน์ */
+    min-width: 250px;
+    margin-bottom: 0; /* ลบ margin เดิม เพราะใช้ gap แล้ว */
+}
+
+.inputbox.full-width {
+    flex: 1 1 100%; /* เต็มบรรทัด */
+}
+
+/* --- Input Styling --- */
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box; /* สำคัญ: ไม่ให้ input ล้น */
+    transition: border-color 0.15s ease-in-out;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 51, 102, 0.25);
+}
+
+/* --- Buttons --- */
+button {
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 8px 16px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 4px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.btn-primary { background-color: var(--primary-color); color: #fff; }
+.btn-secondary { background-color: var(--secondary-color); color: #fff; }
+.btn-success { background-color: var(--success-color); color: #fff; }
+.btn-danger { background-color: var(--danger-color); color: #fff; }
+.btn-search { background-color: #0dcaf0; color: #fff; }
+
+.btn-danger.small {
+    padding: 4px 10px;
+    font-size: 0.875rem;
+    margin-top: 10px;
+}
+
+button:hover { opacity: 0.9; }
+
+.buttonbox {
+    margin-top: 10px;
+    text-align: right; /* ปุ่มชิดขวาแบบฟอร์มทางการ */
+}
+
+/* --- Search Bar --- */
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.search-bar .form-control { width: auto; flex-grow: 1; }
+
+/* --- Result Grid --- */
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.result-item {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.result-item h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.result-item p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* --- Footer --- */
+.footer-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end; /* ชิดขวา */
+    gap: 10px;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+    .inputbox {
+        flex: 1 1 100%; /* มือถือ: เต็มจอทุกช่อง */
+    }
+
+    .search-bar {
+        flex-direction: column;
+    }
+    
+    .search-bar button {
+        width: 100%;
+    }
+
+    .buttonbox, .footer-actions {
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .buttonbox button, .footer-actions button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

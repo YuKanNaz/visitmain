@@ -1,41 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;700&display=swap');
 
-/* ส่วนควบคุมพื้นฐาน */
+/* --- ส่วนควบคุมพื้นฐาน --- */
 .admin-dashboard {
     font-family: "Noto Serif Thai", serif;
     background-color: #f0f2f5;
     min-height: 100vh;
-    padding: 15px; /* ลด padding สำหรับมือถือ */
+    padding: 20px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* ระยะห่างระหว่างแต่ละ Section */
 }
 
-/* Header: ปรับให้ยืดหยุ่น */
+/* Header */
 .user-info {
     background-color: #1a3a5f;
     color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 12px;
     display: flex;
-    flex-direction: row; /* ปกติเรียงแนวนอน */
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* ถ้าจอมือถือเล็กมากให้ขึ้นบรรทัดใหม่ */
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.user-info h3 { margin: 0; font-size: 1.1rem; }
+.user-info h3 { margin: 0; font-size: 1.2rem; }
 
-/* ส่วนของฟอร์มเพิ่มพนักงาน */
+/* --- ฟอร์มเพิ่มพนักงาน --- */
 .con-put-of {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     border-top: 6px solid #1a3a5f;
     width: 100%;
-    max-width: 500px; /* คุมความกว้างใน PC */
-    margin: 0 auto 30px auto; /* จัดกลาง */
+    max-width: 500px;
+    margin: 0 auto;
     box-sizing: border-box;
 }
 
@@ -44,30 +46,25 @@
     font-weight: 700;
     color: #1a3a5f;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-/* Input: ทำให้เต็มความกว้างเสมอ */
-.inputbox { margin-bottom: 12px; }
+/* Input Styles */
+.inputbox { margin-bottom: 15px; }
 .inputbox input {
     width: 100%;
     padding: 14px;
-    font-size: 16px; /* ป้องกัน iOS ซูมจอเวลาโฟกัส */
-    border: 1px solid #ccc;
+    font-size: 16px;
+    border: 1px solid #ced4da;
     border-radius: 8px;
     box-sizing: border-box;
     font-family: sans-serif;
+    transition: 0.3s;
 }
 
-.inputbox { margin-bottom: 12px; }
-.inputbox input {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px; /* ป้องกัน iOS ซูมจอเวลาโฟกัส */
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-family: sans-serif;
+.inputbox input:focus {
+    border-color: #1a3a5f;
+    outline: none;
 }
 
 .buttonbox button {
@@ -80,14 +77,16 @@
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
+    transition: background 0.3s;
 }
+.buttonbox button:hover { background-color: #218838; }
 
-/* ส่วนค้นหาผู้ต้องขัง */
+/* --- ส่วนค้นหา (ใช้ร่วมกันทั้ง User และ Prisoner) --- */
 .search-section {
     background: white;
-    padding: 20px;
+    padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     width: 100%;
     box-sizing: border-box;
 }
@@ -95,70 +94,172 @@
 .search-section h1 {
     font-size: 1.6rem;
     color: #1a3a5f;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
 }
 
-/* ปรับส่วนค้นหาให้เหมาะกับมือถือ */
-.search-section > div:first-of-type {
+/* จัด Layout ช่องค้นหาและปุ่ม */
+.search-section input[type="text"] {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    width: 80%;
+    min-width: 200px;
+}
+
+.search-section button {
+    padding: 12px 25px;
+    background-color: #1a3a5f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap; /* ไม่ให้ตัวหนังสือขึ้นบรรทัดใหม่ */
+}
+
+/* Wrapper สำหรับ Input+Button ใน HTML */
+.search-section > div > div:first-child {
     display: flex;
     flex-direction: row; /* PC เรียงแนวนอน */
     gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
-/* การ์ดผู้ต้องขัง: ใช้ Grid ที่ฉลาดขึ้น */
+/* --- การ์ดแสดงผล (ใช้ร่วมกันทั้งพนักงานและผู้ต้องขัง) --- */
+
+/* 1. Grid สำหรับผู้ต้องขัง (Prisoner) */
 .prisoner-grid {
     display: grid;
-    /* ใน PC จะแบ่งเป็นคอลัมน์ ในมือถือจะปรับเป็น 1 คอลัมน์อัตโนมัติ */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
     margin-top: 20px;
 }
 
-.prisoner-card {
+/* 2. สไตล์ของการ์ด (ใช้ร่วมกัน โดยอ้างอิงจาก div ภายใน Grid) */
+.prisoner-card, 
+.search-section div[style*="flex-wrap"] > div { /* Target div ของรายชื่อพนักงาน */
     background: #fff;
-    border: 1px solid #eee;
-    padding: 15px;
+    border: 1px solid #e9ecef;
+    padding: 20px;
     border-radius: 12px;
-    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s;
+    /* บังคับขนาดการ์ดพนักงาน */
+    flex: 1 1 250px; 
+    margin: 10px;
+    max-width: 100%;
 }
 
-.prisoner-card button {
-    width: 100%;
-    padding: 12px;
-    background-color: #f8f9fa;
-    border: 1px solid #1a3a5f;
+.prisoner-card:hover,
+.search-section div[style*="flex-wrap"] > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.prisoner-card h3,
+.search-section h3 {
+    margin-top: 0;
     color: #1a3a5f;
+    font-size: 1.2rem;
+}
+
+.prisoner-card p,
+.search-section p {
+    color: #666;
+    margin: 5px 0 15px 0;
+}
+
+/* ปุ่มในการ์ด (ลบ/เปลี่ยนสถานะ) */
+.prisoner-card button,
+.search-section div[style*="flex-wrap"] button {
+    width: 100%;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #dc3545; /* สีแดงสำหรับปุ่มลบ/Action */
     border-radius: 6px;
     font-weight: 700;
     margin-top: 10px;
     cursor: pointer;
+    transition: 0.2s;
+    margin-top: auto;
 }
 
-/* ปุ่ม Logout */
-.logout-btn-container {
-    text-align: center;
-    margin: 40px 0;
-}
-.logout-btn {
-    width: 100%; /* มือถือเต็มจอ */
-    max-width: 200px; /* PC คุมความกว้าง */
-    padding: 12px;
+.prisoner-card button:hover,
+.search-section div[style*="flex-wrap"] button:hover {
     background-color: #dc3545;
     color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
+    border-color: #dc3545;
 }
 
-/* --- Media Queries สำหรับมือถือ (หน้าจอเล็กกว่า 600px) --- */
+/* --- ปุ่ม Action ด้านล่าง (Logout, Back, Reset) --- */
+.logout-btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-bottom: 40px;
+}
+
+/* สไตล์พื้นฐานของปุ่มล่าง */
+.admin-dashboard > button, 
+.logout-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 150px;
+    transition: 0.3s;
+}
+
+/* สีเฉพาะปุ่ม */
+.logout-btn {
+    background-color: #6c757d; /* สีเทา สำหรับ Logout */
+    color: white;
+}
+
+.admin-dashboard > button:nth-last-child(2) { /* ปุ่มกลับหน้าหลัก */
+    background-color: #073972;
+    color: white;
+}
+
+.admin-dashboard > button:last-child { /* ปุ่มรีเซ็ตระบบ */
+    background-color: #dc3545; /* สีแดงเตือนภัย */
+    color: white;
+    border: 2px solid #dc3545;
+}
+
+.admin-dashboard > button:last-child:hover {
+    background-color: #c82333;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);
+}
+
+/* --- Responsive Layout (Mobile) --- */
 @media (max-width: 600px) {
-    .admin-dashboard { padding: 10px; }
+
+    .search-section input{
+
+    width: 80%;
+
+    }
+
+    .admin-dashboard { padding: 10px; gap: 15px; }
     
-    /* ปรับส่วนค้นหาให้ปุ่มลงมาข้างล่างในมือถือที่แคบมากๆ */
-    .search-section > div:first-of-type {
+    .search-section > div > div:first-child {
         flex-direction: column;
     }
     
+    .search-section input[type="text"],
     .search-section button {
         width: 100%;
         padding: 12px !important;
@@ -168,4 +269,10 @@
         flex-direction: column;
         text-align: center;
     }
+
+    .logout-btn-container,
+    .admin-dashboard > button {
+        width: 100%; /* ปุ่มเต็มจอในมือถือ */
+    }
 }
+
