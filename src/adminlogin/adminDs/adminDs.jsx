@@ -9,6 +9,10 @@ function AdminDs() {
     const [prisoners, setPrisoners] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
+    //search-delete-officer
+    const [officers, setOfficers] = useState([]); 
+    const [searchOfficerTerm, setSearchOfficerTerm] = useState("");
+
 
     //register off
     const [nameof, setNameof] = useState("");
@@ -112,6 +116,22 @@ function AdminDs() {
             alert("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
         }
     };
+
+
+    const fetchOfficers = async () => {
+        try {
+            // ✅ ใช้ searchOfficerTerm เพื่อไม่ให้ตีกับช่องค้นหานักโทษ
+            const response = await axios.get(`https://node-api-visit.vercel.app/officer?name=${searchOfficerTerm}`);
+            setOfficers(response.data); // ✅ เก็บข้อมูลลง State officers
+        } catch (error) {
+            console.error(error);
+            alert("ไม่สามารถดึงข้อมูลพนักงานได้");
+        }
+    };
+
+
+
+
     return (
       <>
         <div className="admin-dashboard">
@@ -139,9 +159,37 @@ function AdminDs() {
                       </div>
                   </form>
               </div>
-
-              
           </div>
+
+
+
+          <div className="search-section">
+            <h1>ค้นหาชื่อผู้ต้องขัง</h1>
+            <div className="">
+            <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+                <input 
+                    type="text" 
+                    placeholder="ค้นหาชื่อผู้ต้องขัง..." 
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ flex: 1 }}
+                />
+                <button onClick={fetchPrisoners} style={{ backgroundColor: "#1a3a5f", color: "white", padding: "0 25px", borderRadius: "8px" }}>ค้นหา</button>
+            </div>
+            </div>
+            <div className="prisoner-grid">
+                {prisoners.map((item) => (
+                    <div key={item.prisoner_id} className="prisoner-card">
+                        <h3>{item.name}</h3>
+                        <p>รหัส: {item.prisoner_code}</p>
+                        
+                    </div>
+              ))}
+          </div>
+        </div>
+
+
+
+          
 
         <div className="search-section">
             <h1>ค้นหาชื่อผู้ต้องขัง</h1>

@@ -11,7 +11,7 @@ function AdminLogin() {
     useEffect(() => {
         const adminStatus = localStorage.getItem("Status");
         if (adminStatus === "admin") {
-            alert("คุณมีชื่อในระบบเเล้ว")
+            
             navigate('/adminDs')
         }
     }, [navigate]); // เพิ่ม navigate ใน dependency array เพื่อความถูกต้อง

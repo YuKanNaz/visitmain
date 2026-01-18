@@ -12,6 +12,9 @@ function StaffDs(){
     const [prisoners, setPrisoners] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
+    const [showUser, setShowUser] = useState([]);
+    const [searchUser, setSearchUser] = useState("");
+
     const [prisoners_code, setPrisoners_code] = useState("");
     const [namePrisoner, setNamePrisoner] = useState("");
     const [age, setAge] = useState("");
@@ -40,6 +43,28 @@ function StaffDs(){
     }, []);
 
     
+   const handleDeletePrisoner = async (prisoner_id) => {
+    if(!window.confirm("ยืนยันที่จะลบข้อมูลนักโทษคนนี้?")) return;
+    try {
+        const response = await axios.delete(`https://node-api-visit.vercel.app/delete-prisoner/${prisoner_id}`);
+        alert(response.data.message);
+        fetchPrisoners(); // รีเฟรชรายชื่อหลังจากลบ
+    } catch (error) {
+        console.error(error);
+    }
+    };
+
+    const handleDeleteUser = async (id) => {
+    if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
+    try {
+        const response = await axios.delete(`https://node-api-visit.vercel.app/delete-user/${id}`);
+        alert(response.data.message);
+        fetchuser(); // รีเฟรชรายชื่อหลังจากลบ
+    } catch (error) {
+        console.error(error);
+    }
+    };
+
 
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
@@ -80,7 +105,14 @@ function StaffDs(){
         }
     };
 
-        
+   const fetchuser = async () => {
+        try {
+            const response = await axios.get(`https://node-api-visit.vercel.app/user-of-chack?name=${searchUser}`);
+            setShowUser(response.data);   
+        } catch (error) {
+            console.error(error);
+        }
+    };     
   
 
   const handleputtext = async (e) => {
@@ -153,14 +185,15 @@ function StaffDs(){
                 <button onClick={() => navigate('/printpage')}>ปริ้นใบรายชื่อ</button>
             </div>
 
+
+
             <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
                 {prisoners.map((item) => (
                     <div key={item.prisoner_id} style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
                         <h3>{item.name}</h3>
                         <p>รหัส: {item.prisoner_code}</p>
-                        
+                        <button onClick={() =>handleDeletePrisoner(item.prisoner_id)}>ลบนักโทษ</button>
                     </div>
-                    
                 ))}
               </div>
             
@@ -285,9 +318,29 @@ function StaffDs(){
           <button type="submit">เพิ่มรายชื่อ</button>
         </div>
       </form>
-          
 
-    
+            <h1>ค้นหารายชื่อ</h1>
+            <div>
+              <input 
+                    type="text" 
+                    placeholder="ค้นหาชื่อผู้ใช้งาน" 
+                    onChange={(e) => setSearchUser(e.target.value)}
+                />
+                <button onClick={fetchuser}>ค้นหา</button>
+            </div>  
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
+                {showUser.map((item) => (
+                    <div key={item.id} style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
+                        <h3>{item.name}</h3>
+                        <p>เลขบัตรประชาชน:{item.id_card_number}</p>
+                        <p>วันเกิด: {item.birthday}</p>
+                        
+                        <button onClick={() =>handleDeleteUser(item.id)}>ลบนักโทษ</button>
+                    </div>
+                ))}
+              </div>
+            
+
       <div>
         <button onClick={handleLoginout}>logout</button>
       </div>
