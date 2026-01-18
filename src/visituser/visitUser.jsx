@@ -9,30 +9,37 @@ function VisitUser() {
     const [shownotice, setShownotice] = useState([]);
 
     const [selectedPrisoner, setSelectedPrisoner] = useState(null); 
-    const [visitDate, setVisitDate] = useState("");
+    //const [visitDate, setVisitDate] = useState("");
     const [visitTime, setVisitTime] = useState("");
     const [visitorName, setVisitorName] = useState(""); 
     const [phoneN, setPhoneN] = useState("");
     const [relations, setRalations] = useState("");
     const [visit_day, setVisit_day] = useState("");
 
-    const[showuser, setShowuser] = useState([]);
+    const[showuser, setShowuser] = useState("");
 
     const myName = localStorage.getItem("userName");
     const navigate = useNavigate();
 
-     useEffect(() => {
-            const userStatus = localStorage.getItem("Status");
-            showData()
-            showuserdata()
-            console.log("สถานะผู้ใช้: ", showuser);
-            if (userStatus !== "user") {
-              
-              navigate('/')
-            }else{
-            setVisitorName(myName);
-            }
-        }, []);
+    useEffect(() => {
+    const fetchData = async () => {
+        const userStatus = localStorage.getItem("Status");
+        if (userStatus !== "user") {
+            navigate('/');
+            return;
+        }
+        await showData();
+        await showuserdata(); 
+        setVisitorName(myName);
+    };
+
+    fetchData();
+}, []);
+
+useEffect(() => {
+    console.log("สถานะผู้ใช้ล่าสุด: ", showuser);
+}, [showuser]); // เมื่อ showuser เปลี่ยนค่า ให้ทำงานในนี้
+
 
     const handleLoginout = async () => {
       localStorage.clear();
@@ -55,16 +62,19 @@ function VisitUser() {
     };
 
     const showuserdata = async () => {
-        try{
-            const response = await axios.get(`https://node-api-visit.vercel.app/user?name=${myName}`);
-            setShowuser(response.data[0].booking_status);
-            
-        }
+    try {
+        const response = await axios.get(`https://node-api-visit.vercel.app/user?name=${myName}`);
 
-        catch (err){
-            console("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
+        // เช็กว่ามีข้อมูลส่งกลับมาจริงไหม
+        if (response.data && response.data.length > 0) {
+            setShowuser(response.data[0].booking_status);
+        } else {
+            setShowuser("ไม่มีสถานะ");
         }
+    } catch (err) {
+        console.error("เกิดข้อผิดพลาด: ", err);
     }
+}
 
     const showData = async () => {
         try{
@@ -91,31 +101,38 @@ function VisitUser() {
 };
 
     
-    const handleBooking = async (e) => {
-        e.preventDefault();
-       
-        if (!selectedPrisoner) return;
+ const handleBooking = async (e) => {
+    e.preventDefault();
+    if (!selectedPrisoner) return;
 
-        try {
-            await axios.post('https://node-api-visit.vercel.app/book-visit', {
-                prisoner_code: selectedPrisoner.prisoner_code,
-                visitor_name: visitorName,
-                visit_date: visitDate,
-                visit_time: visitTime,
-                prisonerName: selectedPrisoner.name,
-                phone: phoneN,
-                relations: relations,
-                visit_day: visit_day
+    try {
+        const response = await axios.post('https://node-api-visit.vercel.app/book-visit', {
+            prisoner_code: selectedPrisoner.prisoner_code,
+            visitor_name: visitorName,
+            //visit_date: visitDate,
+            visit_time: visitTime,
+            prisonerName: selectedPrisoner.name,
+            phone: phoneN,
+            relations: relations,
+            visit_day: visit_day
+        });
 
-            });
-            await handleState(visitorName);
-            alert("จองเยี่ยมสำเร็จ!");
-            setSelectedPrisoner(null); 
-            
-        } catch (error) {
-            alert("เกิดข้อผิดพลาด");
+        // หากจองสำเร็จ
+        await handleState(visitorName);
+        alert(response.data.message); // แสดง "จองเยี่ยมสำเร็จ รอการอนุมัติ!"
+        navigate('/');
+        setSelectedPrisoner(null); 
+
+    } catch (error) {
+        // จัดการกรณีเกิดข้อผิดพลาด (เช่น ข้อมูลซ้ำ หรือ Error อื่นๆ)
+        if (error.response && error.response.data && error.response.data.message) {
+            // จะแสดง "เวลานี้ของวันดังกล่าวมีผู้อื่นจองแล้ว..." ตามที่ Backend ส่งมา
+            alert(error.response.data.message);
+        } else {
+            alert("เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่ภายหลัง");
         }
-    };
+    }
+};
 
     return (
         <>
@@ -152,11 +169,19 @@ function VisitUser() {
                     <p>เลขบัตร: {item.id_card_number}</p>
                     <p>วันเกิด: {item.birthday}</p>
                     
-                    <button 
-                        onClick={() => setSelectedPrisoner(item)}
-                        style={{ backgroundColor: "#28a745", color: "white", width: "100%" }}>
-                        นัดเยี่ยมคนนี้
-                    </button>
+                    {showuser === "จองแล้ว" && (
+                        <button disabled style={{ backgroundColor: "#6c757d", color: "white", width: "100%" }}>
+                            ไม่สามารถจองได้
+                            </button>
+                    )}
+                    {showuser !== "จองแล้ว" && (
+                        <button 
+                            onClick={() => setSelectedPrisoner(item)}
+                            style={{ backgroundColor: "#007bff", color: "white", width: "100%" }}
+                        >
+                        เลือกเพื่อจองเยี่ยม
+                        </button>
+                    )}
                 </div>
             ))}
         </div>
@@ -165,11 +190,11 @@ function VisitUser() {
             <div className="booking-form-box" style={{ marginTop: "30px", border: "2px solid blue", padding: "20px" }}>
                 <h3>กำลังจองเยี่ยม: {selectedPrisoner.name}</h3>
                 <form onSubmit={handleBooking}>
-                    <div className="form-group-item">
+                    {/*--<div className="form-group-item">
                         <label>วันที่ต้องการเยี่ยม: </label>
                         <input type="date" onChange={(e) => setVisitDate(e.target.value)} required />
                         <p style={{color: "red", fontSize: "0.9rem"}}>*เลือกได้เเค่วัน จันทร์-ศุกร์</p>
-                    </div>
+                    </div>--*/}
                     <div className="form-group-item">
                         <label>รอบเวลา: </label>
                         <select onChange={(e) => setVisitTime(e.target.value)} required>
