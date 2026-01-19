@@ -173,17 +173,17 @@ function AdminDs() {
             <div >
               <input 
                     type="text" 
-                    placeholder="ค้นหาชื่อผู้ต้องขัง..." 
+                    placeholder="ค้นหาชื่อพนักงาน..." 
                     onChange={(e) => setSearchOfficerTerm(e.target.value)}
                 />
                 <button onClick={fetchOfficers}>ค้นหา</button>
             </div>
             <div className="prisoner-grid">
                 {officers.map((item) => (
-                    <div key={item.id} >
+                    <div className="officer-card" key={item.id} >
                         <h3>{item.name}</h3>
-                        <p>ชื่อจริง: {item.username}</p>
-                        <button onClick={() =>handleDeleteOfficer(item.id)}>ลบพนักงาน</button>
+                        <p>ชื่อผู้ใช้: {item.username}</p>
+                        <button className="deleteofficer" onClick={() =>handleDeleteOfficer(item.id)}>ลบพนักงาน</button>
                     </div>
                 ))}
               </div>
@@ -217,12 +217,12 @@ function AdminDs() {
         </div>
 
           <div className="logout-btn-container">
-              <button className="logout-btn" onClick={handleLoginout}>ออกจากระบบ (Logout)</button>
-          </div>
-          <button onClick={() => navigate('/')}>กลับหน้าหลัก</button>
-          <button onClick={handleResetSystem}>
+            <button className="pageback-btn" onClick={() => navigate('/')}>กลับหน้าหลัก</button>
+            <button className="logout-btn" onClick={handleLoginout}>ออกจากระบบ (Logout)</button>
+            <button className="reset-btn"onClick={handleResetSystem}>
             รีเซ็ตระบบเริ่มต้นใหม่
           </button>
+          </div>
         </div>
 
        

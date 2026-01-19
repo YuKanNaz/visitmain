@@ -19,7 +19,8 @@
 /* จัดระเบียบ Form */
 .user-login-page form {
     background: rgb(219, 217, 219);
-    padding: 40px;
+    padding: 15px;
+    border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     width: 100%;
     max-width: 400px; /* คุมความกว้างช่องกรอก */
@@ -77,4 +78,16 @@
     display: block;
     content: "";
     margin-top: 10px;
+}
+@media (max-width: 200px) {
+    .user-login-page input {
+    max-width: 250px;
+    width: 100%;
+    padding: 5px;
+    font-size: 1.4rem;
+    border: 2px solid #ced4da;
+    border-radius: 10px;
+    box-sizing: border-box; /* กันล้น */
+    font-family: sans-serif; /* ใช้ font พื้นฐานสำหรับช่องรหัสเพื่อให้จุดกลมชัดเจน */
+}
 }

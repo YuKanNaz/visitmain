@@ -47,7 +47,7 @@ function UserLogin() {
                     <label>รหัสบัตรประจำตัวประชาชน: </label>
                     <input 
                         type="text"
-                        placeholder="กรุณาเลขบัตรประชาชน"
+                        placeholder="เลขบัตรประชาชน"
                         onChange={(e) => setName(e.target.value)} 
                         required 
                     />
@@ -57,7 +57,7 @@ function UserLogin() {
                     <label>วันเกิด: </label>
                     <input 
                         type="password" 
-                        placeholder="กรุณาใส่วันเกิด"
+                        placeholder="เช่น 01/01/2530"
                         onChange={(e) => setBirthday(e.target.value)} 
                         required 
                     />
