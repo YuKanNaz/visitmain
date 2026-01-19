@@ -8,12 +8,8 @@ function Homemain(){
   const [isAdmin, setIsAdmin] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
   const [isUser, setIsUser] = useState(false);
-  
-  // 1. สร้าง State สำหรับเก็บจำนวนเจ้าหน้าที่ (ค่าเริ่มต้นเป็น 0)
-  const [officerCount, setOfficerCount] = useState(0);
 
   useEffect(() => {
-    // ตรวจสอบสถานะ Login
     if (localStorage.getItem("Status") === "admin") {
       setIsAdmin(true);
     }
@@ -23,19 +19,6 @@ function Homemain(){
     if( localStorage.getItem("Status") === "user") {
       setIsUser(true); 
     }
-
-    // 2. ดึงข้อมูลจำนวนเจ้าหน้าที่จาก Backend
-    // หมายเหตุ: เปลี่ยน http://localhost:3001 เป็น URL ของ Vercel หากคุณ Deploy แล้ว
-    fetch('https://node-api-visit.vercel.app/count-officer')
-      .then(response => response.json())
-      .then(data => {
-        // data.total มาจากชื่อตัวแปรที่เราตั้งใน Backend (SELECT COUNT(*) AS total)
-        setOfficerCount(data.total); 
-      })
-      .catch(error => {
-        console.error("Error fetching officer count:", error);
-      });
-
   }, []);
 
   // ส่วนปุ่ม Login
@@ -58,6 +41,7 @@ function Homemain(){
 
   return(
     <>
+      {/* เพิ่ม className หลัก */}
       <div className="home-main-page">
         <div className="container">
           
@@ -87,12 +71,10 @@ function Homemain(){
             )}
           </div>
 
-          {/* 3. ส่วนแสดงผลข้อมูล (Dashboard Card) */}
+
           <div className="show-card">
-            <div style={statCardStyle}>
-                <h3>เจ้าหน้าที่ปฏิบัติงาน</h3>
-                <p style={statNumberStyle}>{officerCount} ท่าน</p>
-            </div>
+            
+
           </div>
 
         </div>
@@ -100,7 +82,4 @@ function Homemain(){
     </>
   )
 }
-
-
-
-export default Homemain;
+export default Homemain

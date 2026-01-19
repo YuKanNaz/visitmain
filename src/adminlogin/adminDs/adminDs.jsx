@@ -173,7 +173,7 @@ function AdminDs() {
             <div >
               <input 
                     type="text" 
-                    placeholder="ค้นหาชื่อพนักงาน..." 
+                    placeholder="ค้นหาชื่อผู้ต้องขัง..." 
                     onChange={(e) => setSearchOfficerTerm(e.target.value)}
                 />
                 <button onClick={fetchOfficers}>ค้นหา</button>
