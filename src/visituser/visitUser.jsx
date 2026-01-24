@@ -52,7 +52,7 @@ useEffect(() => {
     
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://node-api-visit.vercel.app/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`prisoner?name=${searchTerm}`);
             setResults(response.data);
             setSelectedPrisoner(null); // รีเซ็ตคน
             
@@ -63,7 +63,7 @@ useEffect(() => {
 
     const showuserdata = async () => {
     try {
-        const response = await axios.get(`https://node-api-visit.vercel.app/user?name=${myName}`);
+        const response = await axios.get(`user?name=${myName}`);
 
         // เช็กว่ามีข้อมูลส่งกลับมาจริงไหม
         if (response.data && response.data.length > 0) {
@@ -78,7 +78,7 @@ useEffect(() => {
 
     const showData = async () => {
         try{
-            const response = await axios.get('https://node-api-visit.vercel.app/notice');
+            const response = await axios.get('notice');
             setShownotice(response.data);
         }
        
@@ -89,7 +89,7 @@ useEffect(() => {
 
     const handleState = async (nameuser) => {
     try {
-        await axios.put("https://node-api-visit.vercel.app/update-visit-status", {
+        await axios.put("update-visit-status", {
             visit_id: nameuser, 
             status: "จองแล้ว" 
         });
@@ -106,7 +106,7 @@ useEffect(() => {
     if (!selectedPrisoner) return;
 
     try {
-        const response = await axios.post('https://node-api-visit.vercel.app/book-visit', {
+        const response = await axios.post('book-visit', {
             prisoner_code: selectedPrisoner.prisoner_code,
             visitor_name: visitorName,
             //visit_date: visitDate,

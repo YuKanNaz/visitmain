@@ -65,7 +65,7 @@ const PrintPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://node-api-visit.vercel.app/printdata`);
+        const response = await axios.get(`printdata`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

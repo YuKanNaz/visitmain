@@ -48,7 +48,7 @@ function StaffDs(){
    const handleDeletePrisoner = async (prisoner_id) => {
     if(!window.confirm("ยืนยันที่จะลบข้อมูลนักโทษคนนี้?")) return;
     try {
-        const response = await axios.delete(`https://node-api-visit.vercel.app/delete-prisoner/${prisoner_id}`);
+        const response = await axios.delete(`delete-prisoner/${prisoner_id}`);
         alert(response.data.message);
         fetchPrisoners(); // รีเฟรชรายชื่อหลังจากลบ
     } catch (error) {
@@ -59,7 +59,7 @@ function StaffDs(){
     const handleDeleteUser = async (id) => {
     if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
     try {
-        const response = await axios.delete(`https://node-api-visit.vercel.app/delete-user/${id}`);
+        const response = await axios.delete(`delete-user/${id}`);
         alert(response.data.message);
         fetchuser(); // รีเฟรชรายชื่อหลังจากลบ
     } catch (error) {
@@ -71,7 +71,7 @@ function StaffDs(){
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
     try {
-      const response = await axios.post("https://node-api-visit.vercel.app/register-user", {
+      const response = await axios.post("register-user", {
         name: name,
         idCard: idCard,
         phone: phone,
@@ -98,7 +98,7 @@ function StaffDs(){
 
   const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(`https://node-api-visit.vercel.app/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`prisoner?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -109,7 +109,7 @@ function StaffDs(){
 
    const fetchuser = async () => {
         try {
-            const response = await axios.get(`https://node-api-visit.vercel.app/user-of-chack?name=${searchUser}`);
+            const response = await axios.get(`user-of-chack?name=${searchUser}`);
             setShowUser(response.data);   
         } catch (error) {
             console.error(error);
@@ -120,7 +120,7 @@ function StaffDs(){
   const handleputtext = async (e) => {
     e.preventDefault(); 
     try {
-        const response = await axios.put("https://node-api-visit.vercel.app/puttext-officer", {
+        const response = await axios.put("puttext-officer", {
             Notice: notice,
             createby: myName 
         });
@@ -137,7 +137,7 @@ function StaffDs(){
   const handleputprisoner = async (e) => {
     e.preventDefault(); 
     try {
-        const response = await axios.post("https://node-api-visit.vercel.app/putprisoner", {
+        const response = await axios.post("putprisoner", {
             prisoner_code: prisoners_code,
             name: namePrisoner,
             age: age,

@@ -39,7 +39,7 @@ function AdminDs() {
     const handleReOf = async (e) => {
       e.preventDefault();
       try{
-        const response = await axios.post("https://node-api-visit.vercel.app/register-officer", {
+        const response = await axios.post("register-officer", {
           nameof: nameof,
           username: username,
           password: password,
@@ -57,7 +57,7 @@ function AdminDs() {
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
     try {
-      const response = await axios.post("https://node-api-visit.vercel.app/register-user", {
+      const response = await axios.post("register-user", {
         name: name,
         idCard: idCard,
         phone: phone,
@@ -92,7 +92,7 @@ function AdminDs() {
 
     const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(`https://node-api-visit.vercel.app/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`prisoner?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -104,7 +104,7 @@ function AdminDs() {
     const fetchOfficers = async () => {
         try {
             // ✅ ใช้ searchOfficerTerm เพื่อไม่ให้ตีกับช่องค้นหานักโทษ
-            const response = await axios.get(`https://node-api-visit.vercel.app/officer?name=${searchOfficerTerm}`);
+            const response = await axios.get(`officer?name=${searchOfficerTerm}`);
             setOfficers(response.data); // ✅ เก็บข้อมูลลง State officers
         } catch (error) {
             console.error(error);
@@ -114,7 +114,7 @@ function AdminDs() {
     const handleDeleteOfficer = async (id) => {
       if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
         try {
-            const response = await axios.delete(`https://node-api-visit.vercel.app/delete-officer/${id}`);
+            const response = await axios.delete(`delete-officer/${id}`);
             fetchOfficers()// โหลดใหม่
         } catch (err) {
             console.error("Delete Error:", err);
@@ -126,7 +126,7 @@ function AdminDs() {
     const confirmReset = window.confirm("คุณแน่ใจหรือว่าต้องการรีเซ็ตระบบใช่หรือไม่?");
     if (confirmReset) {
         try {
-            const response = await axios.delete('https://node-api-visit.vercel.app/reset-system');
+            const response = await axios.delete('reset-system');
             alert("คุณได้ทำการรีเซ็ตระบบเรียบร้อยแล้ว");
             window.location.reload(); 
         } catch (error) {
