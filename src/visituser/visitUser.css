@@ -15,6 +15,43 @@
     margin: 0 auto;    /* จัดกึ่งกลาง */
     box-sizing: border-box;
 }
+.showuser-booking h1 {
+    font-size: 1.6rem;
+    color: #ff1111; /* สีส้มเข้ม */
+    border-bottom: none;
+}
+.showuser-booking{
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff !important;
+    border-left: 6px solid #fa4141; /* แถบสีเหลืองด้านซ้าย */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding-left: 20px;
+}
+.showuser-booking h1{
+    margin-bottom: -15px;
+}
+.datetime-booking-top{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: -20px;
+    padding-left: 15px;
+}
+.datetime-booking-bottom{
+    display: flex;
+    flex-direction: row;
+    padding-left: 15px;
+}
+.datetime-booking-day{
+    padding-right: 6px;
+}
+.datetime-booking-name{
+    padding-right: 6px;
+    
+}
+
+
 
 /* หัวข้อหลัก */
 .booking-page h2 {
@@ -42,12 +79,15 @@
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     margin-bottom: 25px;
+    
 }
 
 .booking-page .notice-section h2 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: #f57f17; /* สีส้มเข้ม */
     border-bottom: none;
+    margin-bottom: -10px;
+    margin-top: -10px;
 }
 
 .booking-page .notice-section h3 {
@@ -55,6 +95,7 @@
     word-break: break-word;     /* ตัดคำเมื่อยาวเกิน */
     overflow-wrap: break-word;  /* รองรับ browser ใหม่ */
     line-height: 1.6;
+    margin-bottom: -5px;
 }
 
 .booking-page .notice-section {
@@ -142,7 +183,7 @@
 }
 
 .prisoner-card .text-red {
-    color: #d32f2f;
+    color: #b30000;
     font-size: 0.9rem;
     margin-top: 10px;
     margin-bottom: 15px;
@@ -170,6 +211,7 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     animation: fadeIn 0.5s ease-in-out;
 }
+
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -334,4 +376,47 @@
     .booking-page .bottom-visit button {
         min-width: 160px;          /* ขนาดปุ่มสม่ำเสมอ */
     }
+}
+
+@media (max-width: 420px) {
+.datetime-booking-top{
+    display: flex;
+    flex-direction: column;
+}
+.datetime-booking-bottom{
+    display: flex;
+    flex-direction: column;
+}
+.datetime-booking-name{
+    margin-bottom: -20px;
+}
+.datetime-booking-day{
+    margin-bottom: -20px;
+}
+}
+
+@media (max-width: 430px) {
+.datetime-booking-top{
+    display: flex;
+    flex-direction: column;
+}
+.datetime-booking-bottom{
+    display: flex;
+    flex-direction: column;
+}
+.datetime-booking-name{
+    margin-bottom: -20px;
+}
+.datetime-booking-day{
+    margin-bottom: -20px;
+}
+}
+
+@media (max-width: 400px) {
+        .booking-page .search-box button {
+    flex: 1;            /* ให้ input กินพื้นที่ที่เหลือ */
+    width: 100%;        /* ไม่ให้ล้น */
+    max-width: 100%;
+    box-sizing: border-box;
+}
 }

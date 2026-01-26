@@ -18,6 +18,10 @@ function VisitUser() {
 
     const[showuser, setShowuser] = useState("");
 
+    const[showuserBooking, setshowuserBooking] = useState([]);
+
+    //const[]
+
     const myName = localStorage.getItem("userName");
     const navigate = useNavigate();
 
@@ -37,6 +41,7 @@ function VisitUser() {
             navigate('/');
             return;
         }
+        await handleuserBooking();
         await showData();
         await showuserdata(); 
         setVisitorName(myName);
@@ -163,21 +168,54 @@ useEffect(() => {
     }
 };
 
+const handleuserBooking = async () => {
+    try {
+            const response = await axios.get(` https://khaoplong.quizchainat.com/showuser-booking?name=${myName}`);
+            setshowuserBooking(response.data)
+        } catch (error) {
+            console.log(error);
+        }
+}
+
     return (
         <>
-        
+
         <div className="booking-page">
     <div className="notice-section" style={{ padding: "20px" }}>
         <h2>ประกาศจากสำนักงาน</h2>
         <div>
             {shownotice.map((itemN) => (
                 <div key={itemN.ID}>
-                    <h3>- {itemN.Notice}</h3>
+                    <h3>{itemN.Notice}</h3>
                 </div>
             ))}
         </div>
     </div>
     
+            <div className="showuser-booking">
+                <div>{showuserBooking.map((userbooking) => (
+                    <div key={userbooking.visit_id}>
+                        <h1>สถานะการเข้าจอง </h1>
+                        <div className="datetime-booking-top">
+                            <div className="datetime-booking-name">
+                                <h3>คุณ {userbooking.visitor_name}</h3>
+                            </div>    
+                                <h3>เข้าจองเยี่ยม {userbooking.prisonerName}</h3>
+                        </div>
+
+                        <div className="datetime-booking-bottom">
+                            <div className="datetime-booking-day">
+                                <h3>จองคิวเข้าเยี่ยมในวัน {userbooking.visit_day}</h3>
+                        </div>
+                                <h3> เวลา {userbooking.visit_time}</h3>
+                        </div>
+                    </div>
+                ))}
+                </div>
+            </div>
+
+
+
     <div style={{ padding: "20px" }}>
         <h2>ระบบนัดเยี่ยมผู้ต้องขัง</h2>
         
@@ -260,6 +298,7 @@ useEffect(() => {
                             <option value="แม่">แม่</option>
                             <option value="น้อง">น้อง</option>
                             <option value="พี่">พี่</option>
+                            <option value="ลูก">ลูก</option>
                             <option value="ตา">ตา</option>
                             <option value="ยาย">ยาย</option>
                             <option value="ปู่">ปู่</option>
