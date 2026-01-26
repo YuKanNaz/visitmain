@@ -21,6 +21,15 @@ function VisitUser() {
     const myName = localStorage.getItem("userName");
     const navigate = useNavigate();
 
+    const [existingBookings, setExistingBookings] = useState([]);
+
+    const ALL_DAYS = ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์"];
+    const ALL_TIMES = [
+    "12.00-12.05", "12.05-12.10", "12.10-12.15", "12.15-12.20",
+    "12.20-12.25", "12.25-12.30", "12.30-12.35", "12.35-12.40",
+    "12.40-12.45", "12.45-12.50", "12.50-12.55", "12.55-13.00"
+    ];
+
     useEffect(() => {
     const fetchData = async () => {
         const userStatus = localStorage.getItem("Status");
@@ -32,14 +41,34 @@ function VisitUser() {
         await showuserdata(); 
         setVisitorName(myName);
     };
-
+    fetchBookings();
     fetchData();
 }, []);
 
 useEffect(() => {
     console.log("สถานะผู้ใช้ล่าสุด: ", showuser);
 }, [showuser]); // เมื่อ showuser เปลี่ยนค่า ให้ทำงานในนี้
+    
+    const fetchBookings = async () => {
+        try {
+            
+            const response = await axios.get('https://khaoplong.quizchainat.com/printdata'); 
+            setExistingBookings(response.data);
+        } catch (err) {
+        console.error("Error fetching bookings:", err);
+        }
+    };
 
+    const isTimeBooked = (timeToCheck) => {
+    // ถ้ายังไม่เลือกวัน ให้ถือว่ายังไม่ถูกจอง (หรือจะปิดหมดก็ได้)
+        if (!visit_day) return false; 
+
+    // ค้นหาใน existingBookings ว่ามี record ไหนที่ visit_day และ visit_time ตรงกันไหม
+        return existingBookings.some(booking => 
+            booking.visit_day === visit_day && 
+            booking.visit_time === timeToCheck
+        );
+    };
 
     const handleLoginout = async () => {
       localStorage.clear();
@@ -89,7 +118,7 @@ useEffect(() => {
 
     const handleState = async (nameuser) => {
     try {
-        await axios.put("update-visit-status", {
+        await axios.put("https://khaoplong.quizchainat.com/update-visit-status", {
             visit_id: nameuser, 
             status: "จองแล้ว" 
         });
@@ -192,43 +221,41 @@ useEffect(() => {
             <div className="booking-form-box" style={{ marginTop: "30px", border: "2px solid blue", padding: "20px" }}>
                 <h3>กำลังจองเยี่ยม: {selectedPrisoner.name}</h3>
                 <form onSubmit={handleBooking}>
-                    {/*--<div className="form-group-item">
-                        <label>วันที่ต้องการเยี่ยม: </label>
-                        <input type="date" onChange={(e) => setVisitDate(e.target.value)} required />
-                        <p style={{color: "red", fontSize: "0.9rem"}}>*เลือกได้เเค่วัน จันทร์-ศุกร์</p>
-                    </div>--*/}
+                   
                         <div>
                             <label>วันที่ต้องการเข้าเยี่ยม:</label>
-                             <select onChange={(e) => setVisit_day(e.target.value)} required>
-                                <option value="จันทร์">จันทร์</option>
-                                <option value="อังคาร">อังคาร</option>
-                                <option value="พุธ">พุธ</option>
-                                <option value="พฤหัส ">พฤหัส</option>                           
+                             <select onChange={(e) => setVisit_day(e.target.value)} required value={visit_day}>
+                                <option value="" disabled>กรุณาเลือกวัน...</option>
+                                {ALL_DAYS.map((day) => (
+                                <option key={day} value={day}>{day}</option>
+                                ))}
                             </select>
                         </div>
 
 
                     <div className="form-group-item">
                         <label>รอบเวลาเข้าเยี่ยม: </label>
-                        <select onChange={(e) => setVisitTime(e.target.value)} required>
-                            <option value="12.00-12.05">รอบ 12.00-12.05</option>
-                            <option value="12.05-12.10">รอบ 12.05-12.10</option>
-                            <option value="12.10-12.15">รอบ 12.10-12.15</option>
-                            <option value="12.15-12.20">รอบ 12.15-12.20</option>
-                            <option value="12.20-12.25">รอบ 12.20-12.25</option>
-                            <option value="12.25-12.30">รอบ 12.25-12.30</option>
-                            <option value="12.30-12.35">รอบ 12.30-12.35</option>
-                            <option value="12.35-12.40">รอบ 12.35-12.40</option>
-                            <option value="12.40-12.45">รอบ 12.40-12.45</option>
-                            <option value="12.45-12.50">รอบ 12.45-12.50</option>
-                            <option value="12.50-12.55">รอบ 12.50-12.55</option>
-                            <option value="12.55-13.00">รอบ 12.55-13.00</option>
+                        <select onChange={(e) => setVisitTime(e.target.value)} required value={visitTime}>
+                            <option value="" disabled>กรุณาเลือกรอบเวลา...</option>
+                            {ALL_TIMES.map((time) => {
+                                const booked = isTimeBooked(time); // เช็คว่าเวลานี้โดนจองยัง
+                            if (booked) {
+                                return null;
+                            }
+                            return (
+                                <option key={time} value={time}>
+                                    {time}
+                                </option>
+                            );
+                            })}
+
                         </select>
                     </div>
 
                     <div className="form-group-item">
                         <label>เกี่ยวข้องเป็น:</label>
                          <select onChange={(e) => setRalations(e.target.value)} required>
+                            <option value="" disabled>กรุณาเลือกความสัมพันธ์...</option>
                             <option value="พ่อ">พ่อ</option>
                             <option value="แม่">แม่</option>
                             <option value="น้อง">น้อง</option>

@@ -57,7 +57,7 @@ function AdminDs() {
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
     try {
-      const response = await axios.post("register-user", {
+      const response = await axios.post("https://khaoplong.quizchainat.com/register-user", {
         name: name,
         idCard: idCard,
         phone: phone,
@@ -126,7 +126,7 @@ function AdminDs() {
     const confirmReset = window.confirm("คุณแน่ใจหรือว่าต้องการรีเซ็ตระบบใช่หรือไม่?");
     if (confirmReset) {
         try {
-            const response = await axios.delete('reset-system');
+            const response = await axios.delete('https://khaoplong.quizchainat.com/reset-system');
             alert("คุณได้ทำการรีเซ็ตระบบเรียบร้อยแล้ว");
             window.location.reload(); 
         } catch (error) {
