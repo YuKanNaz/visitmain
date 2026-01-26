@@ -65,7 +65,7 @@ const PrintPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`printdata`);
+        const response = await axios.get(` https://khaoplong.quizchainat.com/printdata`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

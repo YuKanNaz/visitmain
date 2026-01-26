@@ -52,7 +52,7 @@ useEffect(() => {
     
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`prisoner?name=${searchTerm}`);
+            const response = await axios.get(` https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
             setResults(response.data);
             setSelectedPrisoner(null); // รีเซ็ตคน
             
@@ -63,7 +63,7 @@ useEffect(() => {
 
     const showuserdata = async () => {
     try {
-        const response = await axios.get(`user?name=${myName}`);
+        const response = await axios.get(` https://khaoplong.quizchainat.com/user?name=${myName}`);
 
         // เช็กว่ามีข้อมูลส่งกลับมาจริงไหม
         if (response.data && response.data.length > 0) {
@@ -78,7 +78,7 @@ useEffect(() => {
 
     const showData = async () => {
         try{
-            const response = await axios.get('notice');
+            const response = await axios.get(' https://khaoplong.quizchainat.com/notice');
             setShownotice(response.data);
         }
        
@@ -106,7 +106,7 @@ useEffect(() => {
     if (!selectedPrisoner) return;
 
     try {
-        const response = await axios.post('book-visit', {
+        const response = await axios.post(' https://khaoplong.quizchainat.com/book-visit', {
             prisoner_code: selectedPrisoner.prisoner_code,
             visitor_name: visitorName,
             //visit_date: visitDate,

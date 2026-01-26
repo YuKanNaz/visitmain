@@ -39,7 +39,7 @@ function AdminDs() {
     const handleReOf = async (e) => {
       e.preventDefault();
       try{
-        const response = await axios.post("register-officer", {
+        const response = await axios.post(" https://khaoplong.quizchainat.com/register-officer", {
           nameof: nameof,
           username: username,
           password: password,
@@ -92,7 +92,7 @@ function AdminDs() {
 
     const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(`prisoner?name=${searchTerm}`);
+            const response = await axios.get(` https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -104,7 +104,7 @@ function AdminDs() {
     const fetchOfficers = async () => {
         try {
             // ✅ ใช้ searchOfficerTerm เพื่อไม่ให้ตีกับช่องค้นหานักโทษ
-            const response = await axios.get(`officer?name=${searchOfficerTerm}`);
+            const response = await axios.get(` https://khaoplong.quizchainat.com/officer?name=${searchOfficerTerm}`);
             setOfficers(response.data); // ✅ เก็บข้อมูลลง State officers
         } catch (error) {
             console.error(error);
@@ -114,7 +114,7 @@ function AdminDs() {
     const handleDeleteOfficer = async (id) => {
       if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
         try {
-            const response = await axios.delete(`delete-officer/${id}`);
+            const response = await axios.delete(` https://khaoplong.quizchainat.com/delete-officer/${id}`);
             fetchOfficers()// โหลดใหม่
         } catch (err) {
             console.error("Delete Error:", err);
