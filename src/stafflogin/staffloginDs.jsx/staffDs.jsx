@@ -10,6 +10,7 @@ function StaffDs(){
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
+    const [detail, setDetail] = useState("");
 
     const [prisoners, setPrisoners] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -24,6 +25,7 @@ function StaffDs(){
     const [sentence_detail, setSentence_detail] = useState("");
     const [birthdayP, setBirthdayP] = useState("");
     const [id_card_numberP, setId_card_numberP] = useState("");
+    const [homefrom, setHomefrom] = useState("");
 
 
     const [notice, setNotice] = useState("");
@@ -145,7 +147,8 @@ function StaffDs(){
             sentence_detail: sentence_detail,
             added_by: myName,
             birthdayP: birthdayP,
-            id_card_numberP: id_card_numberP
+            id_card_numberP: id_card_numberP,
+            homefrom: homefrom
         });
          alert(response.data.message);
       } catch (err) {
@@ -257,6 +260,15 @@ function StaffDs(){
                     required
                 />
                 </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="ภูมิลำเนา"
+                    value={homefrom}
+                    onChange={(e) => setHomefrom(e.target.value)}
+                    required
+                />
+                </div>
                 <div className="buttonbox full-width">
                 <button className="btn-success" type="submit">บันทึกข้อมูล</button>
                 </div>
@@ -286,6 +298,7 @@ function StaffDs(){
                                   <p>รหัส: {item.prisoner_code}</p>
                                   <p>เลขบัตรประชาชน: {item.id_card_number}</p>
                                   <p>วันเกิด: {item.birthday}</p>
+                                  <p>ที่อยู่: {item.homefrom}</p>
                                   <button className="btn-danger small" onClick={() =>handleDeletePrisoner(item.prisoner_id)}>ลบข้อมูล</button>
                               </div>
                           ))}
@@ -346,6 +359,15 @@ function StaffDs(){
                     required
                 />
                 </div>
+                <div className="inputbox">
+                <input
+                    className="form-control"
+                    placeholder="รายละเอียดความสัมพันธ์"
+                    value={detail}
+                    onChange={(e) => setDetail(e.target.value)}
+                    required
+                />
+                </div>
                 <div className="buttonbox full-width">
                 <button className="btn-success" type="submit">เพิ่มรายชื่อ</button>
                 </div>
@@ -374,6 +396,7 @@ function StaffDs(){
                             <h3>{item.name}</h3>
                             <p>เลขบัตรประชาชน: {item.id_card_number}</p>
                             <p>วันเกิด: {item.birthday}</p>
+                            <p>รายละเอียดความสัมพันธ์: {item.detail}</p>
                             <button className="btn-danger small" onClick={() =>handleDeleteUser(item.id)}>ลบข้อมูล</button>
                         </div>
                     ))}

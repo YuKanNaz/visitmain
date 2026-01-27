@@ -234,7 +234,6 @@ const handleuserBooking = async () => {
                 <div key={item.prisoner_id} className="prisoner-card" style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
                     <h3>{item.name}</h3>
                     <p>รหัส: {item.prisoner_code}</p>
-                    <p>เลขบัตร: {item.id_card_number}</p>
                     <p>วันเกิด: {item.birthday}</p>
                     <p className="text-red">* หากเลือกแล้วให้กรอกข้อมูลการเข้าจองด้านล่าง</p>
                     
