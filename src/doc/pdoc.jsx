@@ -94,7 +94,7 @@ const PrintPage = () => {
                 type="text" 
                 value={inputValue} 
                 onChange={(e) => setInputValue(e.target.value)} 
-                placeholder="รายละเอียดวันที่"
+                placeholder="รายละเอียดวันที่ (ทำให้ว่างเปล่าแล้วกดเพิ่มข้อความเพื่อลบข้อควาทั้งหมด)"
                 className="date-input"
               />
             </div>

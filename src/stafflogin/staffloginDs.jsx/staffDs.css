@@ -50,7 +50,10 @@ body {
 .card-body {
     padding: 20px;
 }
-
+/* เจาะจงไปที่ปุ่ม btn-primary ที่อยู่ใน card-body */
+.card-body .btn-primary {
+  margin-top: 5px;
+}
 /* --- Form Layout (Grid) --- */
 .form-layout {
     display: flex;
@@ -88,6 +91,8 @@ body {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 51, 102, 0.25);
 }
+
+
 
 /* --- Buttons --- */
 button {
@@ -197,4 +202,8 @@ button:hover { opacity: 0.9; }
         width: 100%;
         margin-bottom: 10px;
     }
+
+    .inputbox.full-width input{
+    max-width: 100%;
+}
 }

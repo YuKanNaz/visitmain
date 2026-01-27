@@ -124,6 +124,29 @@ button:hover {
   padding-top: 20px;
   border-top: 1px dashed #ccc;
 }
+/* คอนเทนเนอร์หลัก */
+.search-section {
+  display: flex;
+  justify-content: flex-start; /* บังคับให้เริ่มจากซ้าย */
+  width: 100%;
+}
+
+/* ตัวฟอร์ม */
+.date-form {
+  display: flex;
+  flex-direction: column; /* จัดองค์ประกอบแบบบนลงล่าง */
+  align-items: flex-start;  /* บังคับให้ Label และ Input ชิดซ้าย */
+  width: 100%;
+}
+
+/* กลุ่ม Input และ Label */
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+}
 
 /* ---------------------------------- */
 /* Responsive สำหรับมือถือ */

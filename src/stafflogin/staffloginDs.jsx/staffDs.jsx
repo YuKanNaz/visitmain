@@ -180,7 +180,9 @@ function StaffDs(){
                 onChange={(e) => setNotice(e.target.value)}
                 />
               </div>
+              
               <button className="btn-primary" type="submit">ลงประกาศ</button>
+              
             </form>
           </div>
       </div>
@@ -231,7 +233,7 @@ function StaffDs(){
                     required
                 />
                 </div>
-                  
+                  {/* --- ลบรายละเอียดคำพิพากษา --- 
                 <div className="inputbox full-width">
                 <input
                     className="form-control"
@@ -241,11 +243,11 @@ function StaffDs(){
                     required
                 />
                 </div>
-                
+                */}
                 <div className="inputbox">
                 <input
                     className="form-control"
-                    placeholder="เลขบัตรประจำตัวประชาชน"
+                    placeholder="เลขบัตรประชาชน"
                     value={id_card_numberP}
                     onChange={(e) => setId_card_numberP(e.target.value)}
                     required
