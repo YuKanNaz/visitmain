@@ -91,6 +91,33 @@
   background-color: var(--btn-admin);
 }
 
+.show-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* บังคับให้ลูกทุกตัว (show-card01, 02, 03) ชิดซ้าย */
+  width: 100%;             /* ขยายพื้นที่ให้เต็มความกว้าง container */
+  margin-top: 15px;
+  padding-left: 25px;      /* (เลือกใส่) ขยับออกจากขอบซ้ายนิดนึงเพื่อให้ดูสมดุล */
+  background-color: #ffb489;
+  border-radius: 10px;
+}
+
+/* เพื่อความชัวร์ ให้สั่งที่ตัว p ด้วย */
+.show-card div p {
+  text-align: left;
+  margin: 5px 0;          /* เพิ่มระยะห่างบน-ล่าง ระหว่างบรรทัด */
+}
+
+.show-card01 {
+  margin-top: 5px;
+}
+.show-card03 {
+  margin-bottom: 5px;
+}
+
+
+
+
 /* -------------------------------------------------------- */
 /* Media Query: ปรับแต่งเมื่อหน้าจอเล็ก (มือถือ) */
 /* -------------------------------------------------------- */
