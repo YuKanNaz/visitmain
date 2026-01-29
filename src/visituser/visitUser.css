@@ -71,6 +71,15 @@
     margin-top: 10px;
 }
 
+.card-body h5{
+    margin-top: -10px;
+    margin-bottom: 6px;
+    margin-left: 5px;
+    color: #ff0000;
+    font-weight: 400;
+    font-size: 0.8rem;
+}
+
 /* --- 2. ส่วนประกาศ (Notice Section) --- */
 /* ใช้ !important เพื่อทับ Inline style เดิม */
 .booking-page .notice-section {
@@ -413,10 +422,35 @@
 }
 
 @media (max-width: 400px) {
-        .booking-page .search-box button {
+    .booking-page .search-box button {
     flex: 1;            /* ให้ input กินพื้นที่ที่เหลือ */
     width: 100%;        /* ไม่ให้ล้น */
     max-width: 100%;
     box-sizing: border-box;
+}
+}
+@media (max-width: 420px) {
+    /* จัดกล่องหลักให้เรียงแนวตั้งและกว้าง 80% */
+.bottom-visit {
+  display: flex;
+  flex-direction: column; /* เรียงจากบนลงล่าง */
+  width: 80%;             /* ความกว้าง 80% */
+  margin: 20px auto;      /* จัดกึ่งกลางหน้าจอ */
+  gap: 15px;              /* ระยะห่างระหว่างปุ่ม */
+}
+
+/* สั่งให้ปุ่มทั้ง 2 ตัวขยายเต็มและเท่ากัน */
+.bottom-visit button {
+  width: 100%;            /* ยืดให้เต็มพื้นที่ (ทำให้ปุ่มเท่ากัน) */
+  padding: 12px 0;        /* เพิ่มความสูงปุ่มให้สวยงาม */
+  font-size: 16px;        /* ขนาดตัวอักษร */
+  border: none;
+  border-radius: 8px;     /* มุมมน */
+  cursor: pointer;
+}
+
+/* (จำเป็น) ล้างค่า margin เดิมที่ติดมากับปุ่มยกเลิก */
+.bottom-visit .btn-02 {
+  margin-left: 0 !important; 
 }
 }

@@ -65,7 +65,7 @@ const PrintPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(` https://khaoplong.quizchainat.com/printdata`);
+        const response = await axios.get(` /printdata`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -89,12 +89,12 @@ const PrintPage = () => {
         <div className="search-section">
           <form onSubmit={handldputtext} className="date-form">
             <div className="input-group">
-              <label>ลงวันที่:</label>
+              <label>ลงวันที่</label>
               <input 
                 type="text" 
                 value={inputValue} 
                 onChange={(e) => setInputValue(e.target.value)} 
-                placeholder="รายละเอียดวันที่ (ทำให้ว่างเปล่าแล้วกดเพิ่มข้อความเพื่อลบข้อควาทั้งหมด)"
+                placeholder="ลงวันที่ (ทำให้ว่างเพื่อลบข้อควาทั้งหมด)"
                 className="date-input"
               />
             </div>

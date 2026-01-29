@@ -21,7 +21,7 @@ function StaffLogin () {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(' https://khaoplong.quizchainat.com/login-officer', {
+      const response = await axios.post(' /login-officer', {
         username: username,
         password: password
 

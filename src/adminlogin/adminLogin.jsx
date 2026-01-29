@@ -19,7 +19,7 @@ function AdminLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(' https://khaoplong.quizchainat.com/login-admin', {
+            const response = await axios.post(' /login-admin', {
                 name: name,
                 password: password
             });

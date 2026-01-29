@@ -21,7 +21,7 @@ function Homemain(){
     if (localStorage.getItem("Status") === "user") setIsUser(true);
 
     // 2. ดึงข้อมูลและเซ็ตค่าตาม Key ที่ Backend ส่งมา (officer, user, prisoner)
-    fetch('https://khaoplong.quizchainat.com/count-data')
+    fetch('/count-data')
       .then(response => response.json())
       .then(data => {
         setOfficerCount(data.officer);   

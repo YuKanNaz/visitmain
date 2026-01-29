@@ -50,7 +50,7 @@ function StaffDs(){
    const handleDeletePrisoner = async (prisoner_id) => {
     if(!window.confirm("ยืนยันที่จะลบข้อมูลนักโทษคนนี้?")) return;
     try {
-        const response = await axios.delete(`https://khaoplong.quizchainat.com/delete-prisoner/${prisoner_id}`);
+        const response = await axios.delete(`/delete-prisoner/${prisoner_id}`);
         alert(response.data.message);
         fetchPrisoners(); // รีเฟรชรายชื่อหลังจากลบ
     } catch (error) {
@@ -61,7 +61,7 @@ function StaffDs(){
     const handleDeleteUser = async (id) => {
     if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
     try {
-        const response = await axios.delete(`https://khaoplong.quizchainat.com/delete-user/${id}`);
+        const response = await axios.delete(`/delete-user/${id}`);
         alert(response.data.message);
         fetchuser(); // รีเฟรชรายชื่อหลังจากลบ
     } catch (error) {
@@ -73,7 +73,7 @@ function StaffDs(){
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
     try {
-      const response = await axios.post("https://khaoplong.quizchainat.com/register-user", {
+      const response = await axios.post("/register-user", {
         name: name,
         idCard: idCard,
         phone: phone,
@@ -100,7 +100,7 @@ function StaffDs(){
 
   const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`/prisoner-showall?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -111,7 +111,7 @@ function StaffDs(){
 
    const fetchuser = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/user-of-chack?name=${searchUser}`);
+            const response = await axios.get(`/user-of-chack?name=${searchUser}`);
             setShowUser(response.data);   
         } catch (error) {
             console.error(error);
@@ -122,7 +122,7 @@ function StaffDs(){
   const handleputtext = async (e) => {
     e.preventDefault(); 
     try {
-        const response = await axios.put("https://khaoplong.quizchainat.com/puttext-officer", {
+        const response = await axios.put("/puttext-officer", {
             Notice: notice,
             createby: myName 
         });
@@ -139,7 +139,7 @@ function StaffDs(){
   const handleputprisoner = async (e) => {
     e.preventDefault(); 
     try {
-        const response = await axios.post("https://khaoplong.quizchainat.com/putprisoner", {
+        const response = await axios.post("/putprisoner", {
             prisoner_code: prisoners_code,
             name: namePrisoner,
             age: age,
@@ -176,7 +176,7 @@ function StaffDs(){
               <div className="inputbox full-width">
                 <input
                 className="form-control"
-                placeholder="ใส่ข้อความประกาศ"
+                placeholder="ลงประกาศและลบข้อความเพื่อลบประกาศ"
                 onChange={(e) => setNotice(e.target.value)}
                 />
               </div>
@@ -196,7 +196,9 @@ function StaffDs(){
              <h1>เพิ่มรายชื่อผู้ต้องขัง</h1>
           </div>
           <div className="card-body">
+            <h5>*ใส่ข้อมูลอย่างถูกต้อง ข้อมูลจะตรงตามที่บันทึกทุกประการ</h5>
             <form onSubmit={handleputprisoner} className="form-layout">
+                {/* --- ลบรหัสผู้ต้องขัง --- 
                 <div className="inputbox">
                 <input
                     className="form-control"
@@ -206,6 +208,7 @@ function StaffDs(){
                     required 
                 />
                 </div>
+                */}
                 <div className="inputbox" >
                 <input  
                     className="form-control"
@@ -215,6 +218,7 @@ function StaffDs(){
                     required
                 />
                 </div>
+                {/* --- ลบหมายเลขห้องขัง ---
                 <div className="inputbox">
                 <input
                     className="form-control"
@@ -224,6 +228,8 @@ function StaffDs(){
                     required
                 />
                 </div>
+                */}
+                {/* --- ลบหมายเลขห้องขัง --- 
                 <div className="inputbox">
                 <input
                     className="form-control"
@@ -233,6 +239,7 @@ function StaffDs(){
                     required
                 />
                 </div>
+                */}
                   {/* --- ลบรายละเอียดคำพิพากษา --- 
                 <div className="inputbox full-width">
                 <input
@@ -245,13 +252,32 @@ function StaffDs(){
                 </div>
                 */}
                 <div className="inputbox">
-                <input
-                    className="form-control"
-                    placeholder="เลขบัตรประชาชน"
-                    value={id_card_numberP}
-                    onChange={(e) => setId_card_numberP(e.target.value)}
-                    required
-                />
+                    <input
+                        className="form-control"
+                        type="text" 
+                        inputMode="numeric" 
+                        placeholder="เลขบัตรประชาชน"
+                        value={id_card_numberP}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            const onlyNums = value.replace(/[^0-9]/g, ''); // 1. ยอมให้พิมพ์แค่ตัวเลข
+                            
+                            if (onlyNums.length <= 13) { // 2. พิมพ์ได้สูงสุดแค่ 13 ตัว
+                                setId_card_numberP(onlyNums);
+                            }
+                        }}
+                        required
+                        minLength={13}     /* 3. บังคับขั้นต่ำต้อง 13 ตัว */
+                        pattern="\d{13}"   /* 4. Pattern ต้องเป็นตัวเลข 13 ตัวเป๊ะๆ */
+                        title="กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก" /* ข้อความเตือนตอนกด Submit */
+                    />
+                    
+                    {/* (เสริม) แสดงข้อความเตือนสีแดงทันที ถ้าพิมพ์ยังไม่ครบ */}
+                    {id_card_numberP.length > 0 && id_card_numberP.length < 13 && (
+                        <div style={{color: 'red', fontSize: '12px', marginTop: '5px'}}>
+                            * ยังขาดอีก {13 - id_card_numberP.length} หลัก
+                        </div>
+                    )}
                 </div>
                 <div className="inputbox">
                 <input
@@ -263,13 +289,13 @@ function StaffDs(){
                 />
                 </div>
                 <div className="inputbox">
-                <input
-                    className="form-control"
-                    placeholder="ภูมิลำเนา"
-                    value={homefrom}
-                    onChange={(e) => setHomefrom(e.target.value)}
-                    required
-                />
+                    <input
+                        className="form-control"
+                        placeholder="ภูมิลำเนา"
+                        value={homefrom}
+                        onChange={(e) => setHomefrom(e.target.value)}
+                        // ลบ required ออกแล้ว เพื่อให้ฟิลด์นี้ไม่จำเป็นต้องกรอกก็ได้
+                    />
                 </div>
                 <div className="buttonbox full-width">
                 <button className="btn-success" type="submit">บันทึกข้อมูล</button>
@@ -313,6 +339,7 @@ function StaffDs(){
             <h2>เพิ่มรายชื่อผู้ใช้</h2>
          </div>
          <div className="card-body">
+            <h5>*ใส่ข้อมูลอย่างถูกต้อง ข้อมูลจะตรงตามที่บันทึกทุกประการ</h5>
             <form onSubmit={handleAdmin} className="form-layout">
                 <div className="inputbox">
                 <input
@@ -324,29 +351,66 @@ function StaffDs(){
                 />
                 </div>
                 <div className="inputbox">
-                <input
-                    className="form-control"
-                    placeholder="เลขบัตรประชาชน"
-                    maxLength={13}
-                    value={idCard}
-                    onChange={(e) => setIdCard(e.target.value)}
-                    required
-                />
+                    <input
+                        className="form-control"
+                        type="text"
+                        inputMode="numeric" /* ให้มือถือเด้งแป้นตัวเลข */
+                        placeholder="เลขบัตรประชาชน"
+                        maxLength={13}      /* พิมพ์เกินไม่ได้ */
+                        minLength={13}      /* พิมพ์ไม่ครบ แจ้งเตือนตอนกดส่ง */
+                        pattern="\d{13}"    /* บังคับ Pattern ตัวเลข 13 ตัว */
+                        title="กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก" /* ข้อความแจ้งเตือน */
+                        
+                        value={idCard}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // ลบตัวอักษรทุกอย่างที่ไม่ใช่ตัวเลขออกทันที
+                            const onlyNums = value.replace(/[^0-9]/g, '');
+                            setIdCard(onlyNums);
+                        }}
+                        required
+                    />
+                    
+                    {/* (เสริม) แจ้งเตือนสีแดงใต้ช่อง ถ้าพิมพ์ยังไม่ครบ 13 หลัก (จะแสดงเมื่อมีการพิมพ์แล้ว) */}
+                    {idCard && idCard.length > 0 && idCard.length < 13 && (
+                        <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                            * กรุณากรอกให้ครบ 13 หลัก (ปัจจุบัน {idCard.length}/13)
+                        </div>
+                    )}
+                </div>
+                <div className="inputbox">
+                    <input
+                        className="form-control"
+                        type="tel"          /* ใช้ type="tel" สำหรับเบอร์โทรศัพท์ */
+                        inputMode="numeric" /* ให้มือถือเด้งแป้นตัวเลข */
+                        placeholder="เบอร์โทรศัพท์"
+                        maxLength={10}      /* สูงสุด 10 หลัก */
+                        minLength={10}      /* ต่ำสุด 10 หลัก (Browser จะเตือนตอนกดส่ง) */
+                        pattern="\d{10}"    /* บังคับต้องเป็นตัวเลข 10 ตัวเท่านั้น */
+                        title="กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก"
+                        
+                        value={phone}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // ลบตัวอักษรทุกอย่างที่ไม่ใช่ตัวเลขออก
+                            const onlyNums = value.replace(/[^0-9]/g, '');
+                            setPhone(onlyNums);
+                        }}
+                        required
+                    />
+
+                    {/* (เสริม) แจ้งเตือนสีแดงถ้าพิมพ์ยังไม่ครบ 10 หลัก */}
+                    {phone && phone.length > 0 && phone.length < 10 && (
+                        <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                            * กรุณากรอกให้ครบ 10 หลัก (ปัจจุบัน {phone.length}/10)
+                        </div>
+                    )}
                 </div>
                 <div className="inputbox">
                 <input
                     className="form-control"
-                    placeholder="เบอร์โทรศัพท์"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                />
-                </div>
-                <div className="inputbox">
-                <input
-                    className="form-control"
-                    type="email"
-                    placeholder="อีเมล"
+                    type="text"
+                    placeholder="LineID"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -355,20 +419,20 @@ function StaffDs(){
                 <div className="inputbox">
                 <input
                     className="form-control"
-                    placeholder="วันเกิด"
+                    placeholder="วันเกิด (วว/ดด/ปปปป)"
                     value={birthday}
                     onChange={(e) => setBirthday(e.target.value)}
                     required
                 />
                 </div>
                 <div className="inputbox">
-                <input
-                    className="form-control"
-                    placeholder="รายละเอียดความสัมพันธ์"
-                    value={detail}
-                    onChange={(e) => setDetail(e.target.value)}
-                    required
-                />
+                    <input
+                        className="form-control"
+                        placeholder="รายละเอียดความสัมพันธ์"
+                        value={detail}
+                        onChange={(e) => setDetail(e.target.value)}
+                        /* ลบ required ออกแล้ว */
+                    />
                 </div>
                 <div className="buttonbox full-width">
                 <button className="btn-success" type="submit">เพิ่มรายชื่อ</button>

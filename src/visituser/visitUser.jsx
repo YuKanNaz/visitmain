@@ -57,7 +57,7 @@ useEffect(() => {
     const fetchBookings = async () => {
         try {
             
-            const response = await axios.get('https://khaoplong.quizchainat.com/printdata'); 
+            const response = await axios.get('/printdata'); 
             setExistingBookings(response.data);
         } catch (err) {
         console.error("Error fetching bookings:", err);
@@ -86,7 +86,7 @@ useEffect(() => {
     
     const handleSearch = async () => {
         try {
-            const response = await axios.get(` https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
+            const response = await axios.get(` /prisoner?name=${searchTerm}`);
             setResults(response.data);
             setSelectedPrisoner(null); // รีเซ็ตคน
             
@@ -97,7 +97,7 @@ useEffect(() => {
 
     const showuserdata = async () => {
     try {
-        const response = await axios.get(` https://khaoplong.quizchainat.com/user?name=${myName}`);
+        const response = await axios.get(` /user?name=${myName}`);
 
         // เช็กว่ามีข้อมูลส่งกลับมาจริงไหม
         if (response.data && response.data.length > 0) {
@@ -112,7 +112,7 @@ useEffect(() => {
 
     const showData = async () => {
         try{
-            const response = await axios.get(' https://khaoplong.quizchainat.com/notice');
+            const response = await axios.get(' /notice');
             setShownotice(response.data);
         }
        
@@ -123,7 +123,7 @@ useEffect(() => {
 
     const handleState = async (nameuser) => {
     try {
-        await axios.put("https://khaoplong.quizchainat.com/update-visit-status", {
+        await axios.put("/update-visit-status", {
             visit_id: nameuser, 
             status: "จองแล้ว" 
         });
@@ -140,7 +140,7 @@ useEffect(() => {
     if (!selectedPrisoner) return;
 
     try {
-        const response = await axios.post(' https://khaoplong.quizchainat.com/book-visit', {
+        const response = await axios.post(' /book-visit', {
             prisoner_code: selectedPrisoner.prisoner_code,
             visitor_name: visitorName,
             //visit_date: visitDate,
@@ -170,7 +170,7 @@ useEffect(() => {
 
 const handleuserBooking = async () => {
     try {
-            const response = await axios.get(` https://khaoplong.quizchainat.com/showuser-booking?name=${myName}`);
+            const response = await axios.get(` /showuser-booking?name=${myName}`);
             setshowuserBooking(response.data)
         } catch (error) {
             console.log(error);
@@ -235,7 +235,7 @@ const handleuserBooking = async () => {
                     <h3>{item.name}</h3>
                     <p>รหัส: {item.prisoner_code}</p>
                     <p>วันเกิด: {item.birthday}</p>
-                    <p className="text-red">* หากเลือกแล้วให้กรอกข้อมูลการเข้าจองด้านล่าง</p>
+                    <p className="text-red">* หากเลือกแล้วให้กรอกข้อมูลการเข้าจองด้านล่าง โปรดตรวจสอบประกาศวันปิดทำการด้านบนก่อนจอง</p>
                     
                     {showuser === "จองแล้ว" && (
                         <button disabled style={{ backgroundColor: "#6c757d", color: "white", width: "100%" }}>
@@ -290,9 +290,18 @@ const handleuserBooking = async () => {
                     </div>
 
                     <div className="form-group-item">
-                        <label>เกี่ยวข้องเป็น:</label>
-                         <select onChange={(e) => setRalations(e.target.value)} required>
+                        <label>เกี่ยวข้องเป็น: <span style={{color: 'red'}}>*</span></label>
+                        <select 
+                            name="relations" 
+                            defaultValue="" /* 1. กำหนดค่าเริ่มต้นเป็นค่าว่างเพื่อให้แสดง option แรก */
+                            onChange={(e) => setRalations(e.target.value)} 
+                            required /* 2. ใส่ required ตรงนี้ */
+                        >
+                            {/* 3. Option แรกต้อง value="" และแนะนำให้ใส่ disabled เพื่อไม่ให้เลือกกลับมาได้ */}
                             <option value="" disabled>กรุณาเลือกความสัมพันธ์...</option>
+                            
+                            {/* ลบ <option value="เลือกความสัมพันธ์">เลือกความสัมพันธ์</option> ออก เพราะซ้ำซ้อน */}
+                            
                             <option value="พ่อ">พ่อ</option>
                             <option value="แม่">แม่</option>
                             <option value="น้อง">น้อง</option>
@@ -307,13 +316,12 @@ const handleuserBooking = async () => {
                             <option value="ลุง">ลุง</option>
                             <option value="ป้า">ป้า</option>
                             <option value="อื่นๆ">อื่นๆ</option>
-                            
                         </select>
                     </div>
 
                     <div className="form-group-item">
-                        <label>กรอกเบอร์โทรศัพท์:</label>
-                        <input type="text" placeholder="ใส่เบอร์โทรศัพท์" onChange={(e) => setPhoneN(e.target.value)} required />
+                        <label>กรอก LineID:</label>
+                        <input type="text" placeholder="ใส่LineID" onChange={(e) => setPhoneN(e.target.value)} required />
                     </div>
                     
 
@@ -322,8 +330,10 @@ const handleuserBooking = async () => {
                         
                     <br />
                     <div className="bottom-visit">
-                    <button type="submit" style={{backgroundColor: "#28a745", color: "white"}}>ยืนยันการจอง</button>
-                    <button type="button" onClick={() => setSelectedPrisoner(null)} style={{marginLeft: "10px", backgroundColor: "#dc3545", color: "white"}}>ยกเลิก</button>
+
+                            <button className="btn-01" type="submit" style={{backgroundColor: "#28a745", color: "white"}}>ยืนยันการจอง</button>
+
+                            <button className="btn-02" type="button" onClick={() => setSelectedPrisoner(null)} style={{marginLeft: "10px", backgroundColor: "#dc3545", color: "white"}}>ยกเลิก</button>
                     </div>
                 </form>
             </div>
@@ -331,6 +341,7 @@ const handleuserBooking = async () => {
     </div>
     
     <div className="bottom-nav">
+        <div></div>
         <button className="btn-logout" onClick={handleLoginout}>ออกจากระบบ</button>
         <button className="btn-home" onClick={handleHome}>กลับหน้าหลัก</button>
     </div>

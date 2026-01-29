@@ -39,7 +39,7 @@ function AdminDs() {
     const handleReOf = async (e) => {
       e.preventDefault();
       try{
-        const response = await axios.post(" https://khaoplong.quizchainat.com/register-officer", {
+        const response = await axios.post(" /register-officer", {
           nameof: nameof,
           username: username,
           password: password,
@@ -57,7 +57,7 @@ function AdminDs() {
     const handleAdmin = async (e) => {
     e.preventDefault(); // ✅ หยุดการ reload หน้าเว็บเพื่อให้ required ทำงาน
     try {
-      const response = await axios.post("https://khaoplong.quizchainat.com/register-user", {
+      const response = await axios.post("/register-user", {
         name: name,
         idCard: idCard,
         phone: phone,
@@ -92,7 +92,7 @@ function AdminDs() {
 
     const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(` https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
+            const response = await axios.get(` /prisoner?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -104,7 +104,7 @@ function AdminDs() {
     const fetchOfficers = async () => {
         try {
             // ✅ ใช้ searchOfficerTerm เพื่อไม่ให้ตีกับช่องค้นหานักโทษ
-            const response = await axios.get(` https://khaoplong.quizchainat.com/officer?name=${searchOfficerTerm}`);
+            const response = await axios.get(` /officer?name=${searchOfficerTerm}`);
             setOfficers(response.data); // ✅ เก็บข้อมูลลง State officers
         } catch (error) {
             console.error(error);
@@ -114,7 +114,7 @@ function AdminDs() {
     const handleDeleteOfficer = async (id) => {
       if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
         try {
-            const response = await axios.delete(` https://khaoplong.quizchainat.com/delete-officer/${id}`);
+            const response = await axios.delete(` /delete-officer/${id}`);
             fetchOfficers()// โหลดใหม่
         } catch (err) {
             console.error("Delete Error:", err);
@@ -126,7 +126,7 @@ function AdminDs() {
     const confirmReset = window.confirm("คุณแน่ใจหรือว่าต้องการรีเซ็ตระบบใช่หรือไม่?");
     if (confirmReset) {
         try {
-            const response = await axios.delete('https://khaoplong.quizchainat.com/reset-system');
+            const response = await axios.delete('/reset-system');
             alert("คุณได้ทำการรีเซ็ตระบบเรียบร้อยแล้ว");
             window.location.reload(); 
         } catch (error) {
@@ -168,60 +168,43 @@ function AdminDs() {
 
 
             <div className="search-section">
-            <h1>ค้นหาชื่อพนักงาน</h1>
-            <div className="">
-            <div >
-              <input 
-                    type="text" 
-                    placeholder="ค้นหาชื่อผู้ต้องขัง..." 
-                    onChange={(e) => setSearchOfficerTerm(e.target.value)}
-                />
-                <button onClick={fetchOfficers}>ค้นหา</button>
-            </div>
-            <div className="prisoner-grid">
-                {officers.map((item) => (
-                    <div className="officer-card" key={item.id} >
-                        <h3>{item.name}</h3>
-                        <p>ชื่อผู้ใช้: {item.username}</p>
-                        <button className="deleteofficer" onClick={() =>handleDeleteOfficer(item.id)}>ลบพนักงาน</button>
+              <div className="search-section-top">
+                <h1>ค้นหาชื่อพนักงาน</h1>
+
+                  <div className="search-section-space">
+                    <div className="search-officer01">
+                      <input 
+                          type="text" 
+                            placeholder="ค้นหาชื่อพนักงาน..." 
+                            onChange={(e) => setSearchOfficerTerm(e.target.value)}
+                          />
+                    </div>  
+                    
+                    <div className="search-officer02">
+                      <button onClick={fetchOfficers}>ค้นหา</button>
                     </div>
-                ))}
-              </div>
-              </div>
+                  </div>
+
               </div>
 
+              <div className="search-section-bottom">
+                <div className="officer-grid">
+                    {officers.map((item) => (
+                        <div className="officer-card" key={item.id} >
+                            <h3>{item.name}</h3>
+                            <p>ชื่อผู้ใช้: {item.username}</p>
+                            <button className="deleteofficer" onClick={() =>handleDeleteOfficer(item.id)}>ลบพนักงาน</button>
+                        </div>
+                    ))}
+                </div>
+              </div>
+            </div>
 
-        <div className="search-section">
-            <h1>ค้นหาชื่อผู้ต้องขัง</h1>
-            <div className="">
-            <div>
-                <input 
-                    type="text" 
-                    placeholder="ค้นหาชื่อผู้ต้องขัง..." 
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button onClick={fetchPrisoners} >ค้นหา</button>
-            </div>
-            </div>
-            <div className="prisoner-grid">
-                {prisoners.map((item) => (
-                    <div key={item.prisoner_id} className="prisoner-card">
-                        <h3>{item.name}</h3>
-                        <p>รหัส: {item.prisoner_code}</p>
-                        <p>เลขบัตรประชาชน: {item.id_card_number}</p>
-                        <p>วันเกิด: {item.birthday}</p>
-                        
-                    </div>
-              ))}
-          </div>
-        </div>
 
           <div className="logout-btn-container">
             <button className="pageback-btn" onClick={() => navigate('/')}>กลับหน้าหลัก</button>
-            <button className="logout-btn" onClick={handleLoginout}>ออกจากระบบ (Logout)</button>
-            <button className="reset-btn"onClick={handleResetSystem}>
-            รีเซ็ตระบบเริ่มต้นใหม่
-          </button>
+            <button className="logout-btn" onClick={handleLoginout}>ออกจากระบบ</button>
+            <button className="reset-btn"onClick={handleResetSystem}>รีเซ็ตระบบเริ่มต้นใหม่</button>
           </div>
         </div>
 
