@@ -233,7 +233,6 @@ const handleuserBooking = async () => {
             {results.map((item) => (
                 <div key={item.prisoner_id} className="prisoner-card" style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
                     <h3>{item.name}</h3>
-                    <p>รหัส: {item.prisoner_code}</p>
                     <p>วันเกิด: {item.birthday}</p>
                     <p className="text-red">* หากเลือกแล้วให้กรอกข้อมูลการเข้าจองด้านล่าง โปรดตรวจสอบประกาศวันปิดทำการด้านบนก่อนจอง</p>
                     
@@ -304,6 +303,8 @@ const handleuserBooking = async () => {
                             
                             <option value="พ่อ">พ่อ</option>
                             <option value="แม่">แม่</option>
+                            <option value="สามี">สามี</option>
+                            <option value="ภรรยา">ยาย</option>
                             <option value="น้อง">น้อง</option>
                             <option value="พี่">พี่</option>
                             <option value="ลูก">ลูก</option>

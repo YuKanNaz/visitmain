@@ -78,7 +78,10 @@ function StaffDs(){
         idCard: idCard,
         phone: phone,
         email: email,
-        birthday: birthday
+        birthday: birthday,
+        detail: detail
+
+        
       });
 
       alert("เพิ่มรายชื่อผู้ใช้สำเร็จ");
@@ -323,7 +326,6 @@ function StaffDs(){
                           {prisoners.map((item) => (
                               <div key={item.prisoner_id} className="result-item">
                                   <h3>{item.name}</h3>
-                                  <p>รหัส: {item.prisoner_code}</p>
                                   <p>เลขบัตรประชาชน: {item.id_card_number}</p>
                                   <p>วันเกิด: {item.birthday}</p>
                                   <p>ที่อยู่: {item.homefrom}</p>
