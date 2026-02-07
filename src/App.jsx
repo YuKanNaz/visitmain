@@ -11,6 +11,7 @@ import VisitUser from './visituser/visitUser';
 import AdminDs from './adminlogin/adminDs/adminDs';
 import StaffDs from './stafflogin/staffloginDs.jsx/staffDs';
 import PrintPage from './doc/pdoc';
+import PrintPageOnline from './docOnline/onlinedoc';
 
 import './App.css'
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/adminDs" element={<AdminDs />} />
         <Route path="/staffDs" element={<StaffDs />} />
         <Route path="/printpage" element={<PrintPage />} />
+        <Route path="/printpageonline" element={<PrintPageOnline />} />
        
       
         

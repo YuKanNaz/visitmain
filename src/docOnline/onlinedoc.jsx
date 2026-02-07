@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './pdoc.css';
+import './onlinedoc.css';
 
 // รับ props onDelete เพิ่มเข้ามา
 const TableComponent = React.forwardRef(({ data, dateValue, onDelete }, ref) => {
@@ -68,7 +68,7 @@ const TableComponent = React.forwardRef(({ data, dateValue, onDelete }, ref) => 
   );
 });
 
-const PrintPage = () => {
+const PrintPageOnline = () => {
   const [data, setData] = useState([]);
   const [putdata, setPutdata] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -83,7 +83,7 @@ const PrintPage = () => {
   // ฟังก์ชันโหลดข้อมูล
   const fetchData = async () => {
       try {
-        const response = await axios.get(`https://khaoplong.quizchainat.com/printdata`);
+        const response = await axios.get(`https://khaoplong.quizchainat.com/printdata-online`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -102,11 +102,11 @@ const PrintPage = () => {
 
       try {
           // ยิง API ไปลบที่ Backend (อย่าลืมแก้ URL ให้ตรงกับ Backend ของคุณ)
-          await axios.delete(`https://khaoplong.quizchainat.com/delete-visit/${id}`); 
+          await axios.delete(`https://khaoplong.quizchainat.com/delete-visitOnline/${id}`); 
           alert("ลบข้อมูลสำเร็จ");
           
           // อัปเดตข้อมูลในตารางโดยไม่ต้องโหลดหน้าใหม่
-          setData(data.filter(item => item.visit_id !== id));
+          setData(data.filter(item => item.visiton_id !== id));
       } catch (err) {
           console.error(err);
           alert("เกิดข้อผิดพลาดในการลบข้อมูล");
@@ -171,4 +171,4 @@ const PrintPage = () => {
   );
 };
 
-export default PrintPage;
+export default PrintPageOnline;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './visitUser.css';
+
 function VisitUser() {
     const [searchTerm, setSearchTerm] = useState("");
     const [results, setResults] = useState([]);
@@ -9,7 +10,8 @@ function VisitUser() {
     const [shownotice, setShownotice] = useState([]);
 
     const [selectedPrisoner, setSelectedPrisoner] = useState(null); 
-    //const [visitDate, setVisitDate] = useState("");
+    const [selectedPrisonerOnline, setSelectedPrisonerOnline] = useState(null);
+    
     const [visitTime, setVisitTime] = useState("");
     const [visitorName, setVisitorName] = useState(""); 
     const [phoneN, setPhoneN] = useState("");
@@ -17,10 +19,7 @@ function VisitUser() {
     const [visit_day, setVisit_day] = useState("");
 
     const[showuser, setShowuser] = useState("");
-
     const[showuserBooking, setshowuserBooking] = useState([]);
-
-    //const[]
 
     const myName = localStorage.getItem("userName");
     const navigate = useNavigate();
@@ -35,40 +34,47 @@ function VisitUser() {
     ];
 
     useEffect(() => {
-    const fetchData = async () => {
-        const userStatus = localStorage.getItem("Status");
-        if (userStatus !== "user") {
-            navigate('/');
-            return;
-        }
-        await handleuserBooking();
-        await showData();
-        await showuserdata(); 
-        setVisitorName(myName);
-    };
-    fetchBookings();
-    fetchData();
-}, []);
+        const fetchData = async () => {
+            const userStatus = localStorage.getItem("Status");
+            if (userStatus !== "user") {
+                navigate('/');
+                return;
+            }
+            await handleuserBooking();
+            await showData();
+            await showuserdata(); 
+            setVisitorName(myName);
+        };
+        fetchBookings(); 
+        fetchData();
+    }, []);
 
-useEffect(() => {
-    console.log("สถานะผู้ใช้ล่าสุด: ", showuser);
-}, [showuser]); // เมื่อ showuser เปลี่ยนค่า ให้ทำงานในนี้
-    
+    // ✅ ดึงข้อมูลทั้ง 2 ตารางมารวมกัน เพื่อเช็คว่าใคร "เยี่ยมไปแล้ว" บ้าง
     const fetchBookings = async () => {
         try {
+            const [resNormal, resOnline] = await Promise.all([
+                axios.get('https://khaoplong.quizchainat.com/printdata'),
+                axios.get('https://khaoplong.quizchainat.com/printdata-online')
+            ]);
             
-            const response = await axios.get('/printdata'); 
-            setExistingBookings(response.data);
+            // รวมข้อมูลเข้าด้วยกัน
+            const allBookings = [...resNormal.data, ...resOnline.data];
+            setExistingBookings(allBookings);
         } catch (err) {
-        console.error("Error fetching bookings:", err);
+            console.error("Error fetching bookings:", err);
         }
+    };
+
+    // เช็คว่านักโทษคนนี้ มีชื่ออยู่ในรายการจองไหม
+    const checkPrisonerBooked = (nameToCheck) => {
+        if (!nameToCheck) return false;
+        return existingBookings.some(booking => 
+            booking.prisonerName === nameToCheck
+        );
     };
 
     const isTimeBooked = (timeToCheck) => {
-    // ถ้ายังไม่เลือกวัน ให้ถือว่ายังไม่ถูกจอง (หรือจะปิดหมดก็ได้)
         if (!visit_day) return false; 
-
-    // ค้นหาใน existingBookings ว่ามี record ไหนที่ visit_day และ visit_time ตรงกันไหม
         return existingBookings.some(booking => 
             booking.visit_day === visit_day && 
             booking.visit_time === timeToCheck
@@ -86,9 +92,10 @@ useEffect(() => {
     
     const handleSearch = async () => {
         try {
-            const response = await axios.get(` /prisoner?name=${searchTerm}`);
+            const response = await axios.get(`https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
             setResults(response.data);
-            setSelectedPrisoner(null); // รีเซ็ตคน
+            setSelectedPrisoner(null);
+            setSelectedPrisonerOnline(null);
             
         } catch (error) {
             console.error(error);
@@ -96,259 +103,301 @@ useEffect(() => {
     };
 
     const showuserdata = async () => {
-    try {
-        const response = await axios.get(` /user?name=${myName}`);
-
-        // เช็กว่ามีข้อมูลส่งกลับมาจริงไหม
-        if (response.data && response.data.length > 0) {
-            setShowuser(response.data[0].booking_status);
-        } else {
-            setShowuser("ไม่มีสถานะ");
+        try {
+            const response = await axios.get(`https://khaoplong.quizchainat.com/user?name=${myName}`);
+            if (response.data && response.data.length > 0) {
+                setShowuser(response.data[0].booking_status);
+            } else {
+                setShowuser("ไม่มีสถานะ");
+            }
+        } catch (err) {
+            console.error("เกิดข้อผิดพลาด: ", err);
         }
-    } catch (err) {
-        console.error("เกิดข้อผิดพลาด: ", err);
     }
-}
 
     const showData = async () => {
         try{
-            const response = await axios.get(' /notice');
+            const response = await axios.get('https://khaoplong.quizchainat.com/notice');
             setShownotice(response.data);
         }
-       
         catch (err){
-            console("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
+            console.log("เกิดข้อผิดพลาด: " + (err.response?.data?.message || err.message));
         }
     }
 
     const handleState = async (nameuser) => {
-    try {
-        await axios.put("/update-visit-status", {
-            visit_id: nameuser, 
-            status: "จองแล้ว" 
-        });
-        console.log("อัปเดตสถานะสำเร็จ");
-    } catch (err) {
-        console.error("Update Status Error:", err);
-        
-    }
-};
-
-    
- const handleBooking = async (e) => {
-    e.preventDefault();
-    if (!selectedPrisoner) return;
-
-    try {
-        const response = await axios.post(' /book-visit', {
-            prisoner_code: selectedPrisoner.prisoner_code,
-            visitor_name: visitorName,
-            //visit_date: visitDate,
-            visit_time: visitTime,
-            prisonerName: selectedPrisoner.name,
-            phone: phoneN,
-            relations: relations,
-            visit_day: visit_day
-        });
-
-        // หากจองสำเร็จ
-        await handleState(visitorName);
-        alert(response.data.message); // แสดง "จองเยี่ยมสำเร็จ รอการอนุมัติ!"
-        navigate('/');
-        setSelectedPrisoner(null); 
-
-    } catch (error) {
-        // จัดการกรณีเกิดข้อผิดพลาด (เช่น ข้อมูลซ้ำ หรือ Error อื่นๆ)
-        if (error.response && error.response.data && error.response.data.message) {
-            // จะแสดง "เวลานี้ของวันดังกล่าวมีผู้อื่นจองแล้ว..." ตามที่ Backend ส่งมา
-            alert(error.response.data.message);
-        } else {
-            alert("เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่ภายหลัง");
+        try {
+            await axios.put("https://khaoplong.quizchainat.com/update-visit-status", {
+                visit_id: nameuser, 
+                status: "จองแล้ว" 
+            });
+        } catch (err) {
+            console.error("Update Status Error:", err);
         }
-    }
-};
+    };
 
-const handleuserBooking = async () => {
-    try {
-            const response = await axios.get(` /showuser-booking?name=${myName}`);
+    const handleBooking = async (e) => {
+        e.preventDefault();
+        if (!selectedPrisoner) return;
+
+        if (checkPrisonerBooked(selectedPrisoner.name)) {
+            alert("ขออภัย นักโทษรายนี้ถูกจองเยี่ยมไปแล้ว");
+            return;
+        }
+
+        try {
+            const response = await axios.post('https://khaoplong.quizchainat.com/book-visit', {
+                prisoner_code: selectedPrisoner.prisoner_code, 
+                visitor_name: visitorName,
+                visit_time: visitTime,
+                prisonerName: selectedPrisoner.name, 
+                phone: phoneN,
+                relations: relations,
+                visit_day: visit_day
+            });
+
+            await handleState(visitorName);
+            alert(response.data.message); 
+            window.location.reload(); 
+        } catch (error) {
+           alert("จองไม่สำเร็จ: " + (error.response?.data?.message || error.message));
+        }
+    };
+
+    const handleBookingOnline = async (e) => {
+        e.preventDefault();
+        if (!selectedPrisonerOnline) return;
+
+        if (checkPrisonerBooked(selectedPrisonerOnline.name)) {
+            alert("ขออภัย นักโทษรายนี้ถูกจองเยี่ยมไปแล้ว");
+            return;
+        }
+
+        try {
+            const response = await axios.post('https://khaoplong.quizchainat.com/book-visit-online', {
+                prisoner_code: selectedPrisonerOnline.prisoner_code, 
+                visitor_name: visitorName,
+                visit_time: visitTime,
+                prisonerName: selectedPrisonerOnline.name, 
+                phone: phoneN,
+                relations: relations,
+                visit_day: visit_day
+            });
+
+            await handleState(visitorName);
+            alert(response.data.message); 
+            window.location.reload(); 
+        } catch (error) {
+            alert("จองออนไลน์ไม่สำเร็จ: " + (error.response?.data?.message || error.message));
+        }
+    };
+
+    const handleuserBooking = async () => {
+        try {
+            const response = await axios.get(`https://khaoplong.quizchainat.com/showuser-booking?name=${myName}`);
             setshowuserBooking(response.data)
         } catch (error) {
             console.log(error);
         }
-}
+    }
 
     return (
         <>
-
         <div className="booking-page">
-    <div className="notice-section" style={{ padding: "20px" }}>
-        <h2>ประกาศจากสำนักงาน</h2>
-        <div>
-            {shownotice.map((itemN) => (
-                <div key={itemN.ID}>
-                    <h3>{itemN.Notice}</h3>
+            <div className="notice-section" style={{ padding: "20px" }}>
+                <h2>ประกาศจากสำนักงาน</h2>
+                <div>
+                    {shownotice.map((itemN) => (
+                        <div key={itemN.ID}>
+                            <h3>{itemN.Notice}</h3>
+                        </div>
+                    ))}
                 </div>
-            ))}
-        </div>
-    </div>
+            </div>
     
             <div className="showuser-booking">
-                <div>{showuserBooking.map((userbooking) => (
-                    <div key={userbooking.visit_id}>
-                        <h1>สถานะการเข้าจอง </h1>
-                        <div className="datetime-booking-top">
-                            <div className="datetime-booking-name">
-                                <h3>คุณ {userbooking.visitor_name}</h3>
-                            </div>    
+                <div>
+                    {showuserBooking.map((userbooking) => (
+                        <div key={userbooking.visit_id}>
+                            <h1>สถานะการเข้าจอง </h1>
+                            <div className="datetime-booking-top">
+                                <div className="datetime-booking-name">
+                                    <h3>คุณ {userbooking.visitor_name}</h3>
+                                </div>    
                                 <h3>เข้าจองเยี่ยม {userbooking.prisonerName}</h3>
-                        </div>
-
-                        <div className="datetime-booking-bottom">
-                            <div className="datetime-booking-day">
-                                <h3>จองคิวเข้าเยี่ยมในวัน {userbooking.visit_day}</h3>
-                        </div>
+                            </div>
+                            <div className="datetime-booking-bottom">
+                                <div className="datetime-booking-day">
+                                    <h3>จองคิวเข้าเยี่ยมในวัน {userbooking.visit_day}</h3>
+                                </div>
                                 <h3> เวลา {userbooking.visit_time}</h3>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
                 </div>
             </div>
 
-
-
-    <div style={{ padding: "20px" }}>
-        <h2>ระบบนัดเยี่ยมผู้ต้องขัง</h2>
-        
-        <div className="search-box">
-            <input 
-                type="text" 
-                placeholder="ใส่ชื่อผู้ต้องขัง..."
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button onClick={handleSearch} style={{backgroundColor: "#1a3a5f", color: "white"}}>ค้นหา</button>
-        </div>
-        <h4>*หากอยากดูรายชื่อทั้งหมดให้ลบคำค้นหาและกดค้นหา</h4>
-
-        <div className="results-container">
-            {results.map((item) => (
-                <div key={item.prisoner_id} className="prisoner-card" style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
-                    <h3>{item.name}</h3>
-                    <p>วันเกิด: {item.birthday}</p>
-                    <p className="text-red">* หากเลือกแล้วให้กรอกข้อมูลการเข้าจองด้านล่าง โปรดตรวจสอบประกาศวันปิดทำการด้านบนก่อนจอง</p>
-                    
-                    {showuser === "จองแล้ว" && (
-                        <button disabled style={{ backgroundColor: "#6c757d", color: "white", width: "100%" }}>
-                            ไม่สามารถจองได้
-                            </button>
-                    )}
-                    {showuser !== "จองแล้ว" && (
-                        <button 
-                            onClick={() => setSelectedPrisoner(item)}
-                            style={{ backgroundColor: "#007bff", color: "white", width: "100%" }}
-                        >
-                        เลือกเพื่อจองเยี่ยม
-                        </button>
-                    )}
+            <div style={{ padding: "20px" }}>
+                <h2>ระบบนัดเยี่ยมผู้ต้องขัง</h2>
+                
+                <div className="search-box">
+                    <input 
+                        type="text" 
+                        placeholder="ใส่ชื่อผู้ต้องขัง..."
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button onClick={handleSearch} style={{backgroundColor: "#1a3a5f", color: "white"}}>ค้นหา</button>
                 </div>
-            ))}
-        </div>
+                <h4>*หากอยากดูรายชื่อทั้งหมดให้ลบคำค้นหาและกดค้นหา</h4>
 
-        {selectedPrisoner && (
-            <div className="booking-form-box" style={{ marginTop: "30px", border: "2px solid blue", padding: "20px" }}>
-                <h3>กำลังจองเยี่ยม: {selectedPrisoner.name}</h3>
-                <form onSubmit={handleBooking}>
-                   
-                        <div>
-                            <label>วันที่ต้องการเข้าเยี่ยม:</label>
-                             <select onChange={(e) => setVisit_day(e.target.value)} required value={visit_day}>
-                                <option value="" disabled>กรุณาเลือกวัน...</option>
-                                {ALL_DAYS.map((day) => (
-                                <option key={day} value={day}>{day}</option>
-                                ))}
-                            </select>
-                        </div>
+                <div className="results-container">
+                    {results.map((item) => {
+                        // เช็คว่านักโทษคนนี้ถูกจองหรือยัง
+                        const isPrisonerAlreadyBooked = checkPrisonerBooked(item.name);
 
+                        return (
+                            <div key={item.prisoner_id} className="prisoner-card" style={{ border: "1px solid #ccc", margin: "10px", padding: "15px", width: "250px" }}>
+                                <h3>{item.name}</h3>
+                                <p>วันเกิด: {item.birthday}</p>
+                                
+                                {showuser === "จองแล้ว" ? (
+                                    // 1. ถ้า User คนนี้ จองไปแล้ว -> กดไม่ได้ทุกกรณี
+                                    <button disabled style={{ backgroundColor: "#6c757d", color: "white", width: "100%" }}>
+                                        ท่านได้ใช้สิทธิ์จองไปแล้ว
+                                    </button>
+                                ) : isPrisonerAlreadyBooked ? (
+                                    // 2. ถ้า User ยังไม่จอง แต่ "นักโทษคนนี้ถูกคนอื่นจองไปแล้ว" -> ขึ้นข้อความ "เยี่ยมไปแล้ว"
+                                    <button disabled style={{ backgroundColor: "#6c757d", color: "white", width: "100%", cursor: "not-allowed" }}>
+                                        เยี่ยมไปแล้ว (ถูกจองคิวแล้ว)
+                                    </button>
+                                ) : (
+                                    // 3. ถ้ายังว่าง -> แสดงปุ่มจอง
+                                    <div style={{display:'flex', flexDirection:'column', gap:'5px'}}>
+                                        <p className="text-red">* เลือกประเภทการจอง</p>
+                                        
+                                        <button 
+                                            onClick={() => { setSelectedPrisoner(item); setSelectedPrisonerOnline(null); }}
+                                            style={{ backgroundColor: "#007bff", color: "white", width: "100%" }}
+                                        >
+                                            จองเยี่ยมปกติ
+                                        </button>
 
-                    <div className="form-group-item">
-                        <label>รอบเวลาเข้าเยี่ยม: </label>
-                        <select onChange={(e) => setVisitTime(e.target.value)} required value={visitTime}>
-                            <option value="" disabled>กรุณาเลือกรอบเวลา...</option>
-                            {ALL_TIMES.map((time) => {
-                                const booked = isTimeBooked(time); // เช็คว่าเวลานี้โดนจองยัง
-                            if (booked) {
-                                return null;
-                            }
-                            return (
-                                <option key={time} value={time}>
-                                    {time}
-                                </option>
-                            );
-                            })}
+                                        <button 
+                                            onClick={() => { setSelectedPrisonerOnline(item); setSelectedPrisoner(null); }}
+                                            style={{ backgroundColor: "#28a745", color: "white", width: "100%" }}
+                                        >
+                                            จองเยี่ยมออนไลน์
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
 
-                        </select>
+                {/* แบบฟอร์มจองปกติ */}
+                {selectedPrisoner && (
+                    <div className="booking-form-box" style={{ marginTop: "30px", border: "2px solid blue", padding: "20px" }}>
+                        <h3>กำลังจองเยี่ยม (ปกติ): {selectedPrisoner.name}</h3>
+                        <form onSubmit={handleBooking}>
+                            <FormFields 
+                                setVisit_day={setVisit_day} 
+                                visit_day={visit_day} 
+                                ALL_DAYS={ALL_DAYS}
+                                setVisitTime={setVisitTime}
+                                visitTime={visitTime}
+                                ALL_TIMES={ALL_TIMES}
+                                isTimeBooked={isTimeBooked}
+                                setRalations={setRalations}
+                                setPhoneN={setPhoneN}
+                            />
+                            <div className="bottom-visit">
+                                <button className="btn-01" type="submit" style={{backgroundColor: "#007bff", color: "white"}}>ยืนยันการจอง (ปกติ)</button>
+                                <button className="btn-02" type="button" onClick={() => setSelectedPrisoner(null)} style={{marginLeft: "10px", backgroundColor: "#dc3545", color: "white"}}>ยกเลิก</button>
+                            </div>
+                        </form>
                     </div>
+                )}
 
-                    <div className="form-group-item">
-                        <label>เกี่ยวข้องเป็น: <span style={{color: 'red'}}>*</span></label>
-                        <select 
-                            name="relations" 
-                            defaultValue="" /* 1. กำหนดค่าเริ่มต้นเป็นค่าว่างเพื่อให้แสดง option แรก */
-                            onChange={(e) => setRalations(e.target.value)} 
-                            required /* 2. ใส่ required ตรงนี้ */
-                        >
-                            {/* 3. Option แรกต้อง value="" และแนะนำให้ใส่ disabled เพื่อไม่ให้เลือกกลับมาได้ */}
-                            <option value="" disabled>กรุณาเลือกความสัมพันธ์...</option>
-                            
-                            {/* ลบ <option value="เลือกความสัมพันธ์">เลือกความสัมพันธ์</option> ออก เพราะซ้ำซ้อน */}
-                            
-                            <option value="พ่อ">พ่อ</option>
-                            <option value="แม่">แม่</option>
-                            <option value="สามี">สามี</option>
-                            <option value="ภรรยา">ยาย</option>
-                            <option value="น้อง">น้อง</option>
-                            <option value="พี่">พี่</option>
-                            <option value="ลูก">ลูก</option>
-                            <option value="ตา">ตา</option>
-                            <option value="ยาย">ยาย</option>
-                            <option value="ปู่">ปู่</option>
-                            <option value="ย่า">ย่า</option>
-                            <option value="น้า">น้า</option>
-                            <option value="อา">อา</option>
-                            <option value="ลุง">ลุง</option>
-                            <option value="ป้า">ป้า</option>
-                            <option value="อื่นๆ">อื่นๆ</option>
-                        </select>
+                {/* แบบฟอร์มจองออนไลน์ */}
+                {selectedPrisonerOnline && (
+                    <div className="booking-form-box" style={{ marginTop: "30px", border: "2px solid green", padding: "20px" }}>
+                        <h3 style={{color: 'green'}}>กำลังจองเยี่ยม (ออนไลน์): {selectedPrisonerOnline.name}</h3>
+                        <form onSubmit={handleBookingOnline}>
+                            <FormFields 
+                                setVisit_day={setVisit_day} 
+                                visit_day={visit_day} 
+                                ALL_DAYS={ALL_DAYS}
+                                setVisitTime={setVisitTime}
+                                visitTime={visitTime}
+                                ALL_TIMES={ALL_TIMES}
+                                isTimeBooked={isTimeBooked}
+                                setRalations={setRalations}
+                                setPhoneN={setPhoneN}
+                            />
+                            <div className="bottom-visit">
+                                <button className="btn-01" type="submit" style={{backgroundColor: "#28a745", color: "white"}}>ยืนยันการจอง (ออนไลน์)</button>
+                                <button className="btn-02" type="button" onClick={() => setSelectedPrisonerOnline(null)} style={{marginLeft: "10px", backgroundColor: "#dc3545", color: "white"}}>ยกเลิก</button>
+                            </div>
+                        </form>
                     </div>
-
-                    <div className="form-group-item">
-                        <label>กรอก LineID:</label>
-                        <input type="text" placeholder="ใส่LineID" onChange={(e) => setPhoneN(e.target.value)} required />
-                    </div>
-                    
-
-                     
-
-                        
-                    <br />
-                    <div className="bottom-visit">
-
-                            <button className="btn-01" type="submit" style={{backgroundColor: "#28a745", color: "white"}}>ยืนยันการจอง</button>
-
-                            <button className="btn-02" type="button" onClick={() => setSelectedPrisoner(null)} style={{marginLeft: "10px", backgroundColor: "#dc3545", color: "white"}}>ยกเลิก</button>
-                    </div>
-                </form>
+                )}
             </div>
-        )}
-    </div>
-    
-    <div className="bottom-nav">
-        <div></div>
-        <button className="btn-logout" onClick={handleLoginout}>ออกจากระบบ</button>
-        <button className="btn-home" onClick={handleHome}>กลับหน้าหลัก</button>
-    </div>
-</div>
+            
+            <div className="bottom-nav">
+                <div></div>
+                <button className="btn-logout" onClick={handleLoginout}>ออกจากระบบ</button>
+                <button className="btn-home" onClick={handleHome}>กลับหน้าหลัก</button>
+            </div>
+        </div>
         </>
     );
 }
+
+const FormFields = ({ setVisit_day, visit_day, ALL_DAYS, setVisitTime, visitTime, ALL_TIMES, isTimeBooked, setRalations, setPhoneN }) => (
+    <>
+        <div>
+            <label>วันที่ต้องการเข้าเยี่ยม:</label>
+            <select onChange={(e) => setVisit_day(e.target.value)} required value={visit_day}>
+                <option value="" disabled>กรุณาเลือกวัน...</option>
+                {ALL_DAYS.map((day) => (
+                    <option key={day} value={day}>{day}</option>
+                ))}
+            </select>
+        </div>
+
+        <div className="form-group-item">
+            <label>รอบเวลาเข้าเยี่ยม: </label>
+            <select onChange={(e) => setVisitTime(e.target.value)} required value={visitTime}>
+                <option value="" disabled>กรุณาเลือกรอบเวลา...</option>
+                {ALL_TIMES.map((time) => {
+                    const booked = isTimeBooked(time); 
+                    if (booked) return null;
+                    return <option key={time} value={time}>{time}</option>;
+                })}
+            </select>
+        </div>
+
+        <div className="form-group-item">
+            <label>เกี่ยวข้องเป็น: <span style={{color: 'red'}}>*</span></label>
+            <select name="relations" defaultValue="" onChange={(e) => setRalations(e.target.value)} required>
+                <option value="" disabled>กรุณาเลือกความสัมพันธ์...</option>
+                <option value="พ่อ">พ่อ</option>
+                <option value="แม่">แม่</option>
+                <option value="สามี">สามี</option>
+                <option value="ภรรยา">ภรรยา</option>
+                <option value="พี่น้อง">พี่/น้อง</option>
+                <option value="ญาติ">ญาติ</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+            </select>
+        </div>
+
+        <div className="form-group-item">
+            <label>กรอก LineID:</label>
+            <input type="text" placeholder="ใส่LineID" onChange={(e) => setPhoneN(e.target.value)} required />
+        </div>
+        <br />
+    </>
+);
 
 export default VisitUser;
