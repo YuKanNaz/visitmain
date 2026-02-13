@@ -29,7 +29,7 @@ const TableComponent = React.forwardRef(({ data, dateValue, onDelete }, ref) => 
         <tbody>
           {data.length > 0 ? (
             data.map((row, index) => (
-              <tr key={row.visit_id || index}>
+              <tr key={row.visiton_id || index}>
                 <td style={{ border: '1px solid black', padding: '8px', textAlign: 'center' }}>{index + 1}</td>
                 <td style={{ border: '1px solid black', padding: '8px' }}>{row.prisonerName}</td>
                 <td style={{ border: '1px solid black', padding: '8px' }}>{row.visitor_name}</td>
@@ -42,7 +42,7 @@ const TableComponent = React.forwardRef(({ data, dateValue, onDelete }, ref) => 
                 {/* ปุ่มลบ */}
                 <td className="no-print" style={{ border: '1px solid black', padding: '8px', textAlign: 'center' }}>
                     <button 
-                        onClick={() => onDelete(row.visit_id)} // ส่ง ID ไปลบ
+                        onClick={() => onDelete(row.visiton_id)} // ส่ง ID ไปลบ
                         style={{ 
                             backgroundColor: '#ff4d4d', 
                             color: 'white', 
@@ -83,7 +83,7 @@ const PrintPageOnline = () => {
   // ฟังก์ชันโหลดข้อมูล
   const fetchData = async () => {
       try {
-        const response = await axios.get(`https://khaoplong.quizchainat.com/printdata-online`);
+        const response = await axios.get(`/printdata-online`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -102,7 +102,7 @@ const PrintPageOnline = () => {
 
       try {
           // ยิง API ไปลบที่ Backend (อย่าลืมแก้ URL ให้ตรงกับ Backend ของคุณ)
-          await axios.delete(`https://khaoplong.quizchainat.com/delete-visitOnline/${id}`); 
+          await axios.delete(`/delete-visitOnline/${id}`); 
           alert("ลบข้อมูลสำเร็จ");
           
           // อัปเดตข้อมูลในตารางโดยไม่ต้องโหลดหน้าใหม่

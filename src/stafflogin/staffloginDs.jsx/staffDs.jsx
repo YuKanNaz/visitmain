@@ -51,7 +51,7 @@ function StaffDs(){
    const handleDeletePrisoner = async (prisoner_id) => {
     if(!window.confirm("ยืนยันที่จะลบข้อมูลนักโทษคนนี้?")) return;
     try {
-        const response = await axios.delete(`https://khaoplong.quizchainat.com/delete-prisoner/${prisoner_id}`);
+        const response = await axios.delete(`/delete-prisoner/${prisoner_id}`);
         alert(response.data.message);
         fetchPrisoners(); // รีเฟรชรายชื่อหลังจากลบ
     } catch (error) {
@@ -62,7 +62,7 @@ function StaffDs(){
     const handleDeleteUser = async (id) => {
     if(!window.confirm("ยืนยันที่จะลบข้อมูลผู้ใช้คนนี้?")) return;
     try {
-        const response = await axios.delete(`https://khaoplong.quizchainat.com/delete-user/${id}`);
+        const response = await axios.delete(`/delete-user/${id}`);
         alert(response.data.message);
         fetchuser(); // รีเฟรชรายชื่อหลังจากลบ
     } catch (error) {
@@ -84,7 +84,7 @@ function StaffDs(){
     }
 
     try {
-      const response = await axios.post("https://khaoplong.quizchainat.com/register-user", {
+      const response = await axios.post("/register-user", {
         name: name, // ส่งค่า name ปกติ (หรือจะส่ง cleanName ก็ได้ถ้าต้องการตัด space หน้าหลัง)
         idCard: idCard,
         phone: phone,
@@ -114,7 +114,7 @@ function StaffDs(){
 
   const fetchPrisoners = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/prisoner-showall?name=${searchTerm}`);
+            const response = await axios.get(`/prisoner-showall?name=${searchTerm}`);
             setPrisoners(response.data);
             
             
@@ -125,7 +125,7 @@ function StaffDs(){
 
    const fetchuser = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/user-of-chack?name=${searchUser}`);
+            const response = await axios.get(`/user-of-chack?name=${searchUser}`);
             setShowUser(response.data);   
         } catch (error) {
             console.error(error);
@@ -136,7 +136,7 @@ function StaffDs(){
   const handleputtext = async (e) => {
     e.preventDefault(); 
     try {
-        const response = await axios.put("https://khaoplong.quizchainat.com/puttext-officer", {
+        const response = await axios.put("/puttext-officer", {
             Notice: notice,
             createby: myName 
         });
@@ -163,7 +163,7 @@ function StaffDs(){
     }
 
     try {
-        const response = await axios.post("https://khaoplong.quizchainat.com/putprisoner", {
+        const response = await axios.post("/putprisoner", {
             prisoner_code: prisoners_code,
             name: namePrisoner,
             age: age,

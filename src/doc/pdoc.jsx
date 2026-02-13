@@ -83,7 +83,7 @@ const PrintPage = () => {
   // ฟังก์ชันโหลดข้อมูล
   const fetchData = async () => {
       try {
-        const response = await axios.get(`https://khaoplong.quizchainat.com/printdata`);
+        const response = await axios.get(`/printdata`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -102,7 +102,7 @@ const PrintPage = () => {
 
       try {
           // ยิง API ไปลบที่ Backend (อย่าลืมแก้ URL ให้ตรงกับ Backend ของคุณ)
-          await axios.delete(`https://khaoplong.quizchainat.com/delete-visit/${id}`); 
+          await axios.delete(`/delete-visit/${id}`); 
           alert("ลบข้อมูลสำเร็จ");
           
           // อัปเดตข้อมูลในตารางโดยไม่ต้องโหลดหน้าใหม่

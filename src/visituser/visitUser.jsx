@@ -53,8 +53,8 @@ function VisitUser() {
     const fetchBookings = async () => {
         try {
             const [resNormal, resOnline] = await Promise.all([
-                axios.get('https://khaoplong.quizchainat.com/printdata'),
-                axios.get('https://khaoplong.quizchainat.com/printdata-online')
+                axios.get('/printdata'),
+                axios.get('/printdata-online')
             ]);
             
             // รวมข้อมูลเข้าด้วยกัน
@@ -92,7 +92,7 @@ function VisitUser() {
     
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/prisoner?name=${searchTerm}`);
+            const response = await axios.get(`/prisoner?name=${searchTerm}`);
             setResults(response.data);
             setSelectedPrisoner(null);
             setSelectedPrisonerOnline(null);
@@ -104,7 +104,7 @@ function VisitUser() {
 
     const showuserdata = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/user?name=${myName}`);
+            const response = await axios.get(`/user?name=${myName}`);
             if (response.data && response.data.length > 0) {
                 setShowuser(response.data[0].booking_status);
             } else {
@@ -117,7 +117,7 @@ function VisitUser() {
 
     const showData = async () => {
         try{
-            const response = await axios.get('https://khaoplong.quizchainat.com/notice');
+            const response = await axios.get('/notice');
             setShownotice(response.data);
         }
         catch (err){
@@ -127,7 +127,7 @@ function VisitUser() {
 
     const handleState = async (nameuser) => {
         try {
-            await axios.put("https://khaoplong.quizchainat.com/update-visit-status", {
+            await axios.put("/update-visit-status", {
                 visit_id: nameuser, 
                 status: "จองแล้ว" 
             });
@@ -146,7 +146,7 @@ function VisitUser() {
         }
 
         try {
-            const response = await axios.post('https://khaoplong.quizchainat.com/book-visit', {
+            const response = await axios.post('/book-visit', {
                 prisoner_code: selectedPrisoner.prisoner_code, 
                 visitor_name: visitorName,
                 visit_time: visitTime,
@@ -174,7 +174,7 @@ function VisitUser() {
         }
 
         try {
-            const response = await axios.post('https://khaoplong.quizchainat.com/book-visit-online', {
+            const response = await axios.post('/book-visit-online', {
                 prisoner_code: selectedPrisonerOnline.prisoner_code, 
                 visitor_name: visitorName,
                 visit_time: visitTime,
@@ -194,7 +194,7 @@ function VisitUser() {
 
     const handleuserBooking = async () => {
         try {
-            const response = await axios.get(`https://khaoplong.quizchainat.com/showuser-booking?name=${myName}`);
+            const response = await axios.get(`/showuser-booking?name=${myName}`);
             setshowuserBooking(response.data)
         } catch (error) {
             console.log(error);
