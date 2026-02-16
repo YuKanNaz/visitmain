@@ -20,6 +20,7 @@ function VisitUser() {
 
     const[showuser, setShowuser] = useState("");
     const[showuserBooking, setshowuserBooking] = useState([]);
+    const [showuserBookingOnline, setshowuserBookingOnline] = useState([]);
 
     const myName = localStorage.getItem("userName");
     const navigate = useNavigate();
@@ -41,6 +42,7 @@ function VisitUser() {
                 return;
             }
             await handleuserBooking();
+            await handleuserBookingOnline();
             await showData();
             await showuserdata(); 
             setVisitorName(myName);
@@ -200,6 +202,16 @@ function VisitUser() {
             console.log(error);
         }
     }
+    const handleuserBookingOnline = async () => {
+        try {
+            const response = await axios.get(`/showuserOnline-booking?name=${myName}`);
+            setshowuserBookingOnline(response.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
 
     return (
         <>
@@ -237,13 +249,35 @@ function VisitUser() {
                 </div>
             </div>
 
+            <div className="showuser-booking">
+                <div>
+                    {showuserBookingOnline.map((userbookingOnline) => (
+                        <div key={userbookingOnline.visit_id}>
+                            <h1>สถานะการเข้าจอง ออนไลน์ </h1>
+                            <div className="datetime-booking-top">
+                                <div className="datetime-booking-name">
+                                    <h3>คุณ {userbookingOnline.visitor_name }</h3>
+                                </div>    
+                                <h3>เข้าจองเยี่ยม {userbookingOnline.prisonerName}</h3>
+                            </div>
+                            <div className="datetime-booking-bottom">
+                                <div className="datetime-booking-day">
+                                    <h3>จองคิวเข้าเยี่ยมในวัน {userbookingOnline.visit_day}</h3>
+                                </div>
+                                <h3> เวลา {userbookingOnline.visit_time}</h3>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div style={{ padding: "20px" }}>
                 <h2>ระบบนัดเยี่ยมผู้ต้องขัง</h2>
                 
                 <div className="search-box">
                     <input 
                         type="text" 
-                        placeholder="ใส่ชื่อผู้ต้องขัง..."
+                        placeholder="ใส่ชื่อเเละนามสกุลผู้ต้องขัง...  *เว้นวรรณให้ตรง"
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <button onClick={handleSearch} style={{backgroundColor: "#1a3a5f", color: "white"}}>ค้นหา</button>

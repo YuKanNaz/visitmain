@@ -18,7 +18,7 @@ function UserLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(' https://khaoplong.quizchainat.com/login', {
+            const response = await axios.post(' /login', {
                 name: name,
                 birthday: birthday
             });
